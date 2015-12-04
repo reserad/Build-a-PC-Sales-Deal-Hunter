@@ -1,0 +1,35 @@
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.dll.config
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.pdb
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Antlr3.Runtime.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Microsoft.Web.Infrastructure.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Newtonsoft.Json.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Helpers.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Mvc.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Optimization.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Razor.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Deployment.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Razor.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\WebGrease.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Helpers.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Mvc.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Optimization.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Razor.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Deployment.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Razor.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Antlr3.Runtime.pdb
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Newtonsoft.Json.xml
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.csprojResolveAssemblyReference.cache
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.dll
+c:\users\areser\documents\visual studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.pdb
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.dll
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.dll
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Quartz.dll
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.pdb
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.xml
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.pdb
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.xml
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Quartz.pdb
+C:\Users\areser\Documents\Visual Studio 2013\Projects\Build a PC Sales Deal Hunter\Build a PC Sales Deal Hunter\bin\Quartz.xml

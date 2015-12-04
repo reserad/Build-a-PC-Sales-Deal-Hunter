@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script type="text/javascript">
+        $(document).ready(function() {
+            var $fields = $('#fields');
+            $('#btnAddPreference').click(function (e) {
+                $("input[type=submit]").removeAttr('disabled');
+                e.preventDefault();
+                $('<tr><td><input type="text" required placeholder="Query" name="query" /><input type="number" required placeholder="Max $ willing to pay" name="lessThan" /> <button onclick = "Delete($(this).parent().parent())" type = "button" class="btn btn-danger delete"><span class="glyphicon glyphicon-minus"></span></button><td></tr>').appendTo($fields);
+            });
+        });
+        function Delete(e) {
+            e.remove();
+            if ($('#fields tr').length < 1)
+                $("input[type=submit]").attr('disabled', 'disabled');
+        }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="jumbotron">
+        <h1>Recieve imediate deal alerts</h1>
+        <br />
+            <div class="form-group">
+                <input placeholder="Email Address" required type="email" name="email" />
+                <button type="button" id="btnAddPreference" class="btn btn-info">Add Query<span class="glyphicon glyphicon-cog"></span></button>
+                <input disabled="disabled" type="submit" value="Submit" class="btn btn-success" />
+                <table id="fields">
+                </table>
+            </div>
+    </div>
+}
