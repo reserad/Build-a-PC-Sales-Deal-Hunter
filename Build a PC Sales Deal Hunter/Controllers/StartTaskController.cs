@@ -7,6 +7,8 @@ using Quartz;
 using System.Net;
 using Build_a_PC_Sales_Deal_Hunter.Models;
 using System.Web.Script.Serialization;
+using System.Configuration;
+using System.Net.Mail;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
@@ -14,7 +16,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     {
         public void Execute(IJobExecutionContext context)
         {
-            var tm = DbWork.GetTasks();
+            DbWork db = new DbWork();
+            var tm = db.GetTasks();
+            if (tm.Count == 0)
+                return;
             var ListOfStoredProducts = new List<StoredProducts>();
             //Do something ever minute
             using (WebClient wc = new WebClient())
@@ -26,7 +31,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 var d2 = items["data"]["children"];
                 foreach (var a in d2)
                 {
-                    ListOfStoredProducts.Add(new StoredProducts() {Title = a["data"]["title"],URL = a["data"]["url"]});
+                    ListOfStoredProducts.Add(new StoredProducts() {Title = a["data"]["title"],URL = a["data"]["permalink"]});
                 }
             }
 
@@ -34,17 +39,49 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             {
                 foreach (var product in ListOfStoredProducts)
                 {
-                    if (product.Title.Contains(task.Query))
+                    if (product.Title.ToLower().Contains(task.Query.ToLower()))
                     {
-                        var price = PriceFound(product.Title);
+                        int price;
+                        try
+                        {
+                            price = PriceFound(product.Title);
+                        }
+                        catch(Exception e)
+                        {
+                            return;
+                        }
+                        
                         if (task.Price > price) 
                         {
-                            //You're in business buddy, prepare for an email.
-                            //Write to EmailsSent Table to prevent duplicate emails being sent every minute
+                            if (!db.CheckIfEmailSent(product.URL, task.Email)) 
+                            {
+                                try 
+                                {
+                                    //Write to EmailsSent Table to prevent duplicate emails being sent every minute
+                                    db.LogEmailSent(product.URL, task.Email);
+                                    //You're in business buddy, prepare for an email.
+                                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
+                                }
+                                catch(Exception e)
+                                {
+                                    //Log error
+                                    db.LogError("[" +e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+        public SmtpClient GetSmtpClient() 
+        {
+            var smtp = new SmtpClient();
+            smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSSLOnMail"].ToString());
+            return smtp;
+        }
+        public void SendMail(MailMessage message) 
+        {
+            GetSmtpClient().Send(message);
         }
         public int PriceFound(string Title)
         {
@@ -68,6 +105,4 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             public string URL;
         }
     }
-
-
 }

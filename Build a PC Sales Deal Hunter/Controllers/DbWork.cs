@@ -6,15 +6,20 @@ using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using Build_a_PC_Sales_Deal_Hunter.Models;
+using System.Configuration;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
     public class DbWork
     {
-        public static void AddTask(string email, string query, int price)
+        public static string connectionString;
+        public DbWork() 
         {
-            using (var cn2 = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename" +
-            "=|DataDirectory|\\db.mdf; Integrated Security=True"))
+            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
+        }
+        public void AddTask(string email, string query, int price)
+        {
+            using (var cn2 = new SqlConnection(connectionString))
             {
                 string sql = @"INSERT INTO [dbo].[Emails] ([Email], [Query], [Price]) VALUES (@E, @Q, @P)";
                 var insertCmd2 = new SqlCommand(sql, cn2);
@@ -32,11 +37,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cn2.Close();
             }
         }
-        public static List<TaskModel> GetTasks() 
+        public List<TaskModel> GetTasks() 
         {
             List<TaskModel> task = new List<TaskModel>();
-            using (var cn = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename" +
-            "=|DataDirectory|\\db.mdf; Integrated Security=True"))
+            using (var cn = new SqlConnection(connectionString))
             {
                 string _sql = @"SELECT * FROM [dbo].[Emails]";
                 var cmd = new SqlCommand(_sql, cn);
@@ -58,6 +62,92 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cmd.Dispose();
             }
             return task;
+        }
+        public void LogEmailSent(string url, string email) 
+        {
+            using (var cn2 = new SqlConnection(connectionString))
+            {
+                string sql = @"INSERT INTO [dbo].[EmailsSent] ([URL], [Email]) VALUES (@U, @E)";
+                var insertCmd2 = new SqlCommand(sql, cn2);
+                insertCmd2.Parameters
+                    .Add(new SqlParameter("@U", SqlDbType.VarChar))
+                    .Value = url;
+                insertCmd2.Parameters
+                    .Add(new SqlParameter("@E", SqlDbType.VarChar))
+                    .Value = email;
+                cn2.Open();
+                insertCmd2.ExecuteNonQuery();
+                cn2.Close();
+            }
+        }
+        public bool CheckIfEmailSent(string url, string email) 
+        {
+            using (var cn = new SqlConnection(connectionString))
+            {
+                string _sql = @"SELECT * FROM [dbo].[EmailsSent]";
+                var cmd = new SqlCommand(_sql, cn);
+                cn.Open();
+                var reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        if (email.Equals(reader["Email"].ToString()) && url.Equals(reader["URL"].ToString()))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                reader.Dispose();
+                cmd.Dispose();
+            }
+            return false;
+        }
+        public void LogError(string error) 
+        {
+            using (var cn2 = new SqlConnection(connectionString))
+            {
+                string sql = @"INSERT INTO [dbo].[ErrorLogging] ([Error], [Time]) VALUES (@E, @T)";
+                var insertCmd2 = new SqlCommand(sql, cn2);
+                insertCmd2.Parameters
+                    .Add(new SqlParameter("@E", SqlDbType.VarChar))
+                    .Value = error;
+                insertCmd2.Parameters
+                    .Add(new SqlParameter("@T", SqlDbType.DateTime))
+                    .Value = DateTime.Now;
+                cn2.Open();
+                insertCmd2.ExecuteNonQuery();
+                cn2.Close();
+            }
+        }
+        public void RemoveFromEmailService(string email)
+        {
+            using (var cn = new SqlConnection(connectionString))
+            {
+                string _sql = @"DELETE FROM [dbo].[EmailsSent] WHERE [Email] = @E";
+                var cmd = new SqlCommand(_sql, cn);
+                cmd.Parameters
+                    .Add(new SqlParameter("@E", SqlDbType.VarChar))
+                    .Value = email;
+                cn.Open();
+                var reader = cmd.ExecuteReader();
+                reader.Dispose();
+                cmd.Dispose();
+            }
+
+            using (var cn = new SqlConnection(connectionString))
+            {
+                string _sql = @"DELETE FROM [dbo].[Emails] WHERE [Email] = @E";
+                var cmd = new SqlCommand(_sql, cn);
+                cmd.Parameters
+                    .Add(new SqlParameter("@E", SqlDbType.VarChar))
+                    .Value = email;
+                cn.Open();
+                var reader = cmd.ExecuteReader();
+                reader.Dispose();
+                cmd.Dispose();
+            }
         }
     }
 }

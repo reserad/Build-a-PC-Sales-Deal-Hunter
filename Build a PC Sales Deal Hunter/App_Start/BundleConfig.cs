@@ -21,10 +21,12 @@ namespace Build_a_PC_Sales_Deal_Hunter
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/sweet-alert.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/sweet-alert.css",
                       "~/Content/site.css"));
         }
     }

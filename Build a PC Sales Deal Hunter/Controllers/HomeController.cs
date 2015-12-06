@@ -15,16 +15,39 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)
         {
-            //Write to Emails Table
+            DbWork db = new DbWork();
+            //Write to Emails table
             for (int i = 0; i < query.Length; i++)
             {
-                DbWork.AddTask(email, query[i], Convert.ToInt32(lessThan[i]));
+                try
+                {
+                    db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                }
+                catch(Exception e)
+                {
+                    db.LogError("[" +e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                }
             }
             return View();
+        }
+        [HttpPost]
+        public JsonResult Remove(string email) 
+        {
+            //Remove from Emails and EmailsSent tables
+            DbWork db = new DbWork();
+            try
+            {
+                db.RemoveFromEmailService(email.ToLower());
+            }
+            catch(Exception e)
+            {
+                db.LogError("[" +e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                return Json(false);
+            }
+            return Json(true);
         }
     }
 }
