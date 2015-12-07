@@ -1,0 +1,20 @@
+﻿@model Build_a_PC_Sales_Deal_Hunter.Models.StatusInfoModel
+@{
+    ViewBag.Title = "Stats";
+}
+
+<h2>Stats</h2>
+@if (Model.UniqueUsers != null && Model.Errors != null)
+{
+    <p>@Model.UniqueUsers Unique users</p>
+
+    <table border="1" cellpadding="10">
+        @foreach (var item in Model.Errors)
+        {
+            <tr>
+                <td>@item.Time</td>
+                <td>@item.ErrorMessage</td>
+            </tr>
+        }
+    </table>
+}

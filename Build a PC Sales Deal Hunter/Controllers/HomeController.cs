@@ -22,13 +22,16 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             //Write to Emails table
             for (int i = 0; i < query.Length; i++)
             {
-                try
+                if (!String.IsNullOrWhiteSpace(query[i])) 
                 {
-                    db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
-                }
-                catch(Exception e)
-                {
-                    db.LogError("[" +e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                    try
+                    {
+                        db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                    }
+                    catch (Exception e)
+                    {
+                        db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                    }
                 }
             }
             return View();
@@ -38,16 +41,24 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         {
             //Remove from Emails and EmailsSent tables
             DbWork db = new DbWork();
-            try
+            if (!String.IsNullOrWhiteSpace(email))
             {
-                db.RemoveFromEmailService(email.ToLower());
-            }
-            catch(Exception e)
-            {
-                db.LogError("[" +e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
-                return Json(false);
+                try
+                {
+                    db.RemoveFromEmailService(email.ToLower());
+                }
+                catch (Exception e)
+                {
+                    db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                    return Json(false);
+                }
             }
             return Json(true);
+        }
+        public ActionResult Stats() 
+        {
+            DbWork db = new DbWork();
+            return View(db.GetStatus());
         }
     }
 }

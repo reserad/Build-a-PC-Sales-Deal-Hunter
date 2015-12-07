@@ -10,7 +10,7 @@
                 e.preventDefault();
                 var rowCount = $('#fields tr').length;
                 if(rowCount <= 10)
-                    $('<tr><td><input type="text" required placeholder="Query" name="query" /><input type="number" required placeholder="Max $ willing to pay" name="lessThan" /> <button onclick = "Delete($(this).parent().parent())" type = "button" class="btn btn-danger delete"><span class="glyphicon glyphicon-minus"></span></button><td></tr>').appendTo($fields);
+                    $('<tr><td><input type="text" required placeholder="Query (eg GTX 970)" name="query" /><input type="number" pattern="^[0-9]" min="0" required placeholder="Max $ willing to pay" name="lessThan" /> <button onclick = "Delete($(this).parent().parent())" type = "button" class="btn btn-danger delete"><span class="glyphicon glyphicon-minus"></span></button><td></tr>').appendTo($fields);
             });
         });
         function Delete(e) {
@@ -43,7 +43,7 @@
 {
     @Html.AntiForgeryToken()
     <div class="jumbotron" style="background-color:#d9d9d9">
-        <h1>Recieve imediate deal alerts</h1>
+        <h1>Receive immediate deal alerts</h1>
         <br />
             <div class="form-group">
                 <input placeholder="Email Address" required type="email" name="email" id="email" />
