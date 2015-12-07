@@ -36,8 +36,6 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cmd.ExecuteNonQuery();
                 cn.Close();
             }
-
-
         }
         public List<TaskModel> GetTasks() 
         {

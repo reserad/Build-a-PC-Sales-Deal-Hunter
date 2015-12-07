@@ -21,7 +21,7 @@
 
         function RemoveEmail(_email)
         {
-            if(_email.length > 0)
+            if (_email.length > 0)
                 $.ajax({
                     type: "POST",
                     url: "/Home/Remove/",
@@ -29,13 +29,19 @@
                     data: JSON.stringify({ email: _email }),
                     dataType: "json",
                     success: function () {
-                        swal("Success!", "Email Address Removed!", "success");
                         $('.quit').modal('toggle');
+                        swal("Success!", "Email Address Removed!", "success");
                     },
-                    error: function () { sweetAlert("Error Son", "Something went wrong!", "error"); }
+                    error: function () {
+                        $('.quit').modal('toggle');
+                        swal("Error Son", "Something went wrong!", "error");
+                    }
                 });
             else
+            {
+                $('.quit').modal('toggle');
                 swal("Email address required!", "We're fairly certain your email address isn't nothing.", "error");
+            }
         }
 </script>
 
@@ -43,11 +49,12 @@
 {
     @Html.AntiForgeryToken()
     <div class="jumbotron" style="background-color:#d9d9d9">
-        <h1>Receive immediate deal alerts</h1>
+        <h1>Build A PC Sales Email Service</h1>
+        <h2>Receive immediate deal alerts</h2>
         <br />
             <div class="form-group">
                 <input placeholder="Email Address" required type="email" name="email" id="email" />
-                <button type="button" id="btnAddPreference" class="btn btn-info">Add Query <span class="glyphicon glyphicon-cog"></span></button>
+                <button type="button" id="btnAddPreference" class="btn btn-info">Add Querys <span class="glyphicon glyphicon-cog"></span></button>
                 <input disabled="disabled" type="submit" value="Submit" class="btn btn-success" />
                 <button type="button" data-toggle="modal" data-target=".quit" class="btn btn-warning">Quit Service <span class="glyphicon glyphicon-minus"></span></button>
                 <table id="fields">
@@ -69,6 +76,27 @@
                 <button type="button" class="btn btn-danger" onclick="RemoveEmail($('#email').val())">Remove Email</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade showQueries" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">You're already searching for...</h4>
+            </div>
+            <div class="modal-body">
+                <table id="queriesBody">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
