@@ -56,11 +56,8 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
             using (WebClient wc = new WebClient())
             {
                 wc.Proxy = null;
-                var json = wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day");
-                var jss = new JavaScriptSerializer();
-                var items = jss.Deserialize<dynamic>(json);
-                var d2 = items["data"]["children"];
-                foreach (var a in (dynamic)d2)
+                var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
+                foreach (var a in items["data"]["children"])
                 {
                     ListOfStoredProducts.Add(new StoredProducts() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
                 }

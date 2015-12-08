@@ -190,28 +190,37 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public List<TaskModel> GetIndividualTask(string email)
         {
             List<TaskModel> task = new List<TaskModel>();
-            using (var cn = new SqlConnection(connectionString))
+            try 
             {
-                var cmd = new SqlCommand("dbo.IndividualTask_sps", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = email;
-                cn.Open();
-                var reader = cmd.ExecuteReader();
-                if (reader.HasRows)
+                using (var cn = new SqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    var cmd = new SqlCommand("dbo.IndividualTask_sps", cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters
+                        .Add(new SqlParameter("@Email", SqlDbType.VarChar))
+                        .Value = email;
+                    cn.Open();
+                    var reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        TaskModel tm = new TaskModel();
-                        tm.Email = reader["Email"].ToString();
-                        tm.Query = reader["Query"].ToString();
-                        tm.Price = Convert.ToInt32(reader["Price"].ToString());
-                        task.Add(tm);
+                        while (reader.Read())
+                        {
+                            TaskModel tm = new TaskModel();
+                            tm.Email = reader["Email"].ToString();
+                            tm.Query = reader["Query"].ToString();
+                            tm.Price = Convert.ToInt32(reader["Price"].ToString());
+                            task.Add(tm);
+                        }
                     }
+                    reader.Dispose();
+                    cmd.Dispose();
                 }
-                reader.Dispose();
-                cmd.Dispose();
+            }
+            catch (Exception e)
+            {
+                //Log error
+                LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
+                return task;
             }
             return task;
         }

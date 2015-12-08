@@ -18,6 +18,13 @@
                 swal("Success!", "Email Address Submitted!", "success");
                 @ViewData["submit"] = "False";
             }
+
+            var table = $('#dataTable').DataTable(
+            {
+                "paging": false,
+                "info": false,
+                "searching": false
+            });
         });
         function Delete(e) {
             e.remove();
@@ -67,10 +74,10 @@
                 $fields.empty();
                 for (var i = 0; i < data.length; i++)
                 {
-                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td><b>Query</b>: ' + data[i].Query + '     <b>Price</b>: $' + data[i].Price + '</td><td><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td></tr>').appendTo($fields);
+                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td><b>Query</b>: ' + data[i].Query + '</td><td><b>Price</b>: $' + data[i].Price + '</td><td><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td></tr>').appendTo($fields);
                 }
                 if(data.length == 0)
-                    $('<tr><td>No Records Found</td></tr>').appendTo($fields);
+                    $('<tr><td>No Records Found</td><td></td><td></td></tr>').appendTo($fields);
                 $('.showQueries').modal('toggle');
             }
         }
@@ -140,7 +147,15 @@
                 <h4 class="modal-title" id="gridSystemModalLabel">Records found via email address</h4>
             </div>
             <div class="modal-body">
-                <table cellpadding="10" border="1" id="queriesBody">
+                <table class="table table-striped table-bordered" cellpadding="10" border="1" id="dataTable">
+                    <thead style="background-color:#B8D4FF">
+                        <tr>
+                            <th style="vertical-align:middle;">Query</th>
+                            <th style="vertical-align:middle;">Price</th>
+                            <th style="vertical-align:middle;">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="queriesBody"></tbody>
                 </table>
             </div>
             <div class="modal-footer">
