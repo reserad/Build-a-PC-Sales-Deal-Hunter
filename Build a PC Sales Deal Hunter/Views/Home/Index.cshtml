@@ -64,6 +64,7 @@
 
             function PopulateModal(data, status) {
                 var $fields = $('#queriesBody');
+                $fields.remove();
                 for (var i = 0; i < data.length; i++)
                 {
                     $('<tr><td><b>Query</b>: ' + data[i].Query + '     <b>Price</b>: $' + data[i].Price + '</td></tr>').appendTo($fields);

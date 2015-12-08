@@ -58,9 +58,9 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                 try 
                                 {
                                     //You're in business buddy, prepare for an email.
-                                    //SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
+                                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
-                                    //db.LogEmailSent(product.URL, task.Email);
+                                    db.LogEmailSent(product.URL, task.Email);
                                 }
                                 catch(Exception e)
                                 {

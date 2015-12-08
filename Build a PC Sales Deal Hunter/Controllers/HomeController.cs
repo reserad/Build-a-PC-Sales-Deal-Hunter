@@ -27,12 +27,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 {
                     try
                     {
-                        //db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                        db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
                         ViewData["submit"] = true;
                     }
                     catch (Exception e)
                     {
-                        //db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                        db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
                     }
                 }
             }
