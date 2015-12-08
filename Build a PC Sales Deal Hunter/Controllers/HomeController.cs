@@ -13,6 +13,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     {
         public ActionResult Index()
         {
+            ViewData["submit"] = false;
             return View();
         }
         [HttpPost]
@@ -26,11 +27,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 {
                     try
                     {
-                        db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                        //db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                        ViewData["submit"] = true;
                     }
                     catch (Exception e)
                     {
-                        db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                        //db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
                     }
                 }
             }
@@ -54,6 +56,13 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 }
             }
             return Json(true);
+        }
+        [HttpPost]
+        public JsonResult IndividualTask(string email) 
+        {
+            DbWork db = new DbWork();
+            var stuff = db.GetIndividualTask(email);
+            return Json(stuff);
         }
         public ActionResult Stats() 
         {

@@ -182,5 +182,48 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             si.Errors = Errors;
             return si;
         }
+        public List<TaskModel> GetIndividualTask(string email)
+        {
+            List<TaskModel> task = new List<TaskModel>();
+            using (var cn = new SqlConnection(connectionString))
+            {
+                var cmd = new SqlCommand("dbo.IndividualTask_sps", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters
+                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
+                    .Value = email;
+                cn.Open();
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        TaskModel tm = new TaskModel();
+                        tm.Email = reader["Email"].ToString();
+                        tm.Query = reader["Query"].ToString();
+                        tm.Price = Convert.ToInt32(reader["Price"].ToString());
+                        task.Add(tm);
+                    }
+                }
+                reader.Dispose();
+                cmd.Dispose();
+            }
+            return task;
+        }
+        public void DeleteIndividualTask(string email, string query, int price, string URL)
+        {
+            using (var cn = new SqlConnection(connectionString))
+            {
+                var cmd = new SqlCommand("dbo.IndividualTask_spd", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters
+                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
+                    .Value = email;
+                cn.Open();
+                var reader = cmd.ExecuteReader();
+                reader.Dispose();
+                cmd.Dispose();
+            }
+        }
     }
 }
