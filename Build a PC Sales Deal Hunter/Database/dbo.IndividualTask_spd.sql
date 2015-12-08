@@ -12,12 +12,10 @@ GO
 ALTER PROCEDURE [dbo].[IndividualTask_spd]
 @Email varchar(50),
 @Query varchar(50),
-@URL varchar(200),
 @Price int
 
 AS
 BEGIN
     SET NOCOUNT ON;
-	DELETE FROM [dbo].[EmailsSent] WHERE [Email] = @Email AND [URL] = @URL;
 	DELETE FROM [dbo].[Emails] WHERE [Email] = @Email AND [Price] = @Price AND [Query] = @Query
 END

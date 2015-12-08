@@ -39,7 +39,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             {
                 foreach (var product in ListOfStoredProducts)
                 {
-                    if (product.Title.ToLower().Contains(task.Query.ToLower()))
+                    if (product.Title.ToLower().Contains(" " + task.Query.ToLower()) || product.Title.ToLower().Contains(task.Query.ToLower() + " "))
                     {
                         int price;
                         try
@@ -53,20 +53,20 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                         
                         if (task.Price > price) 
                         {
-                            if (!db.CheckIfEmailSent(product.URL, task.Email)) 
+                            try 
                             {
-                                try 
+                               if (!db.CheckIfEmailSent(product.URL, task.Email)) 
                                 {
-                                    //You're in business buddy, prepare for an email.
-                                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     db.LogEmailSent(product.URL, task.Email);
+                                    //You're in business buddy, prepare for an email.
+                                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
                                 }
-                                catch(Exception e)
-                                {
-                                    //Log error
-                                    db.LogError("[" +e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
-                                }
+                            }
+                            catch (Exception e)
+                            {
+                                //Log error
+                                db.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
                             }
                         }
                     }

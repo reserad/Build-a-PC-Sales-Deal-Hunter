@@ -61,8 +61,33 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public JsonResult IndividualTask(string email) 
         {
             DbWork db = new DbWork();
-            var stuff = db.GetIndividualTask(email);
-            return Json(stuff);
+            List<TaskModel> tasks = new List<TaskModel>();
+            try
+            {
+                tasks = db.GetIndividualTask(email);
+            }
+            catch (Exception e)
+            {
+                db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+            }
+
+            return Json(tasks);
+        }
+        [HttpPost]
+        public JsonResult DeleteIndividualTask(string email, string query, int price) 
+        {
+            DbWork db = new DbWork();
+            try
+            {
+                db.DeleteIndividualTask(email, query, price);
+            }
+            catch (Exception e)
+            {
+                db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                return Json(false);
+            }
+
+            return Json(true);
         }
         public ActionResult Stats() 
         {

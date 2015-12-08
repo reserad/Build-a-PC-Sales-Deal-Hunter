@@ -87,10 +87,15 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 using (var cmd = new SqlCommand("dbo.SendEmail_sps", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters
+                        .Add(new SqlParameter("@URL", SqlDbType.VarChar))
+                        .Value = url;
+                    cmd.Parameters
+                        .Add(new SqlParameter("@Email", SqlDbType.VarChar))
+                        .Value = email;
                     cn.Open();
-                    var result = cmd.ExecuteScalar();
+                    var result = cmd.ExecuteReader();
                     cn.Close();
-
                     if (result != null)
                     {
                         int emailSentCount = 0;
@@ -210,7 +215,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return task;
         }
-        public void DeleteIndividualTask(string email, string query, int price, string URL)
+        public void DeleteIndividualTask(string email, string query, int price)
         {
             using (var cn = new SqlConnection(connectionString))
             {
@@ -219,6 +224,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cmd.Parameters
                     .Add(new SqlParameter("@Email", SqlDbType.VarChar))
                     .Value = email;
+                cmd.Parameters
+                    .Add(new SqlParameter("@Query", SqlDbType.VarChar))
+                    .Value = query;
+                cmd.Parameters
+                    .Add(new SqlParameter("@Price", SqlDbType.VarChar))
+                    .Value = price;
                 cn.Open();
                 var reader = cmd.ExecuteReader();
                 reader.Dispose();
