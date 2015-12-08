@@ -88,11 +88,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters
-                        .Add(new SqlParameter("@URL", SqlDbType.VarChar))
-                        .Value = url;
-                    cmd.Parameters
                         .Add(new SqlParameter("@Email", SqlDbType.VarChar))
                         .Value = email;
+                    cmd.Parameters
+                        .Add(new SqlParameter("@URL", SqlDbType.VarChar))
+                        .Value = url;
                     cn.Open();
                     var result = cmd.ExecuteReader();
                     cn.Close();
@@ -107,8 +107,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                         }
                     }
                 }
-                return false;
             }
+            return false;
         }
         public void LogError(string error) 
         {

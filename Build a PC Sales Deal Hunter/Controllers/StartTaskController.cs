@@ -39,7 +39,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             {
                 foreach (var product in ListOfStoredProducts)
                 {
-                    if (product.Title.ToLower().Contains(" " + task.Query.ToLower()) || product.Title.ToLower().Contains(task.Query.ToLower() + " "))
+                    if (product.Title.ToLower().Contains(" " + task.Query.ToLower()) || product.Title.ToLower().Contains(task.Query.ToLower() + " ") || product.Title.ToLower().Contains("[" + task.Query.ToLower() + "]"))
                     {
                         int price;
                         try
@@ -51,7 +51,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                             break;
                         }
                         
-                        if (task.Price > price) 
+                        if (task.Price >= price) 
                         {
                             try 
                             {
