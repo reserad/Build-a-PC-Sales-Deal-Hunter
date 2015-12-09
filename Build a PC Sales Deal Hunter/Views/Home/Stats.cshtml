@@ -4,21 +4,21 @@
 }
 
 <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#dataTable').DataTable(
-            {
-                "info": false
-            });
+    $(document).ready(function () {
+        var table = $('#dataTable').DataTable(
+        {
+            "info": false
         });
-    </script>
+    });
+</script>
 
 <h2>Stats</h2>
 @if (Model.UniqueUsers != null && Model.Errors != null)
 {
     <p>@Model.UniqueUsers Unique users</p>
 
-    <table id="dataTable" border="1" cellpadding="10">
-        <thead><tr><th>Time</th><th>Error Message</th></tr></thead>
+    <table class="table table-striped table-bordered" cellpadding="10" border="1" id="dataTable">
+        <thead style="background-color:#B8D4FF"><tr><th>Time</th><th>Error Message</th></tr></thead>
         <tbody>
             @foreach (var item in Model.Errors)
             {

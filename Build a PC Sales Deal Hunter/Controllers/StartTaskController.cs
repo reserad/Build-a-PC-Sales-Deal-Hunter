@@ -16,13 +16,13 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     {
         public void Execute(IJobExecutionContext context)
         {
-            //Do something every n minutes
-            DbWork db = new DbWork();
+            //Search for matches every 1 minute, sends email if match found, logs match to prevent duplicate emails from being sent.
+            var db = new DbWork();
             var tm = db.GetTasks();
             if (tm.Count == 0)
                 return;
             var ListOfStoredProducts = new List<StoredProducts>();
-            using (WebClient wc = new WebClient())
+            using (var wc = new WebClient())
             {
                 wc.Proxy = null;
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));

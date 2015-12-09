@@ -19,7 +19,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)
         {
-            DbWork db = new DbWork();
+            var db = new DbWork();
             //Write to Emails table
             for (int i = 0; i < query.Length; i++)
             {
@@ -60,8 +60,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult IndividualTask(string email) 
         {
-            DbWork db = new DbWork();
-            List<TaskModel> tasks = new List<TaskModel>();
+            var db = new DbWork();
+            var tasks = new List<TaskModel>();
             try
             {
                 tasks = db.GetIndividualTask(email);
@@ -76,7 +76,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult DeleteIndividualTask(string email, string query, int price) 
         {
-            DbWork db = new DbWork();
+            var db = new DbWork();
             try
             {
                 db.DeleteIndividualTask(email, query, price);
@@ -91,7 +91,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         }
         public ActionResult Stats() 
         {
-            DbWork db = new DbWork();
+            var db = new DbWork();
             return View(db.GetStatus());
         }
     }

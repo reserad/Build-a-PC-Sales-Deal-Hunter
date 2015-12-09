@@ -16,5 +16,5 @@ ALTER PROCEDURE [dbo].[SendEmail_sps]
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT COUNT(*) FROM [dbo].[EmailsSent] WHERE [Email] = @Email AND [URL] = @URL
+    SELECT COUNT(*) AS Emails FROM [dbo].[EmailsSent] WHERE [Email] = @Email AND [URL] = @URL
 END

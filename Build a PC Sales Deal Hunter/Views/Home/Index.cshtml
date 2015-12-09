@@ -74,7 +74,8 @@
                 $fields.empty();
                 for (var i = 0; i < data.length; i++)
                 {
-                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td><b>Query</b>: ' + data[i].Query + '</td><td><b>Price</b>: $' + data[i].Price + '</td><td><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td></tr>').appendTo($fields);
+                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td>' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
+                    + '<td align = "center"><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td>').appendTo($fields);
                 }
                 if(data.length == 0)
                     $('<tr><td>No Records Found</td><td></td><td></td></tr>').appendTo($fields);
@@ -84,14 +85,11 @@
 
         function DeleteTaskItem(e)
         {
-            var _price = e.attr('data-price');
-            var _query = e.attr('data-query');
-            var _email = $('#email').val();
             $.ajax({
                 type: "POST",
                 url: "/Home/DeleteIndividualTask/",
                 contentType: "application/json",
-                data: JSON.stringify({ email: _email, query: _query, price: _price }),
+                data: JSON.stringify({ email: $('#email').val(), query: e.attr('data-query'), price: e.attr('data-price') }),
                 dataType: "json",
                 success: function () {
                     e.remove();
@@ -101,7 +99,6 @@
                 }
             });
         }
-
 </script>
 
 @using (Html.BeginForm())
@@ -117,8 +114,7 @@
             <button type="button" onclick="IndividualTask($('#email').val())" class="btn btn-primary">View Querys <span class="glyphicon glyphicon-edit"></span></button>
             <button disabled="disabled" type="submit" class="btn btn-success">Submit <span class="glyphicon glyphicon-envelope"></span></button>
             <button type="button" data-toggle="modal" data-target=".quit" class="btn btn-warning">Quit Service <span class="glyphicon glyphicon-minus-sign"></span></button>
-            <table id="fields">
-            </table>
+            <table id="fields"></table>
         </div>
     </div>
 }

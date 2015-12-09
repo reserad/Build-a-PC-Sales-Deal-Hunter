@@ -94,18 +94,20 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                         .Add(new SqlParameter("@URL", SqlDbType.VarChar))
                         .Value = url;
                     cn.Open();
-                    var result = cmd.ExecuteReader();
-                    cn.Close();
-                    if (result != null)
+                    var reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        int emailSentCount = 0;
-                        int.TryParse(result.ToString(), out emailSentCount);
-
-                        if (emailSentCount > 0)
+                        while (reader.Read())
                         {
-                            return true;
+                            int emailSentCount = Convert.ToInt32(reader["Emails"].ToString());
+                            if (emailSentCount > 0)
+                            {
+                                return true;
+                            }
                         }
                     }
+                    reader.Dispose();
+                    cmd.Dispose();
                 }
             }
             return false;
