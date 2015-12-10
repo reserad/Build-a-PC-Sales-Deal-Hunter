@@ -13,7 +13,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     public class DbWork
     {
         public static string connectionString;
-        public DbWork() 
+        public DbWork()
         {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
         }
@@ -37,7 +37,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cn.Close();
             }
         }
-        public List<TaskModel> GetTasks() 
+        public List<TaskModel> GetTasks()
         {
             List<TaskModel> task = new List<TaskModel>();
             using (var cn = new SqlConnection(connectionString))
@@ -63,7 +63,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return task;
         }
-        public void LogEmailSent(string url, string email) 
+        public void LogEmailSent(string url, string email)
         {
             using (var cn = new SqlConnection(connectionString))
             {
@@ -80,7 +80,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 cn.Close();
             }
         }
-        public bool CheckIfEmailSent(string url, string email) 
+        public bool CheckIfEmailSent(string url, string email)
         {
             using (var cn = new SqlConnection(connectionString))
             {
@@ -112,7 +112,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return false;
         }
-        public void LogError(string error) 
+        public void LogError(string error)
         {
             using (var cn = new SqlConnection(connectionString))
             {
@@ -192,7 +192,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public List<TaskModel> GetIndividualTask(string email)
         {
             List<TaskModel> task = new List<TaskModel>();
-            try 
+            try
             {
                 using (var cn = new SqlConnection(connectionString))
                 {
@@ -246,6 +246,49 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 reader.Dispose();
                 cmd.Dispose();
             }
+        }
+        public void LogUrlUsed(string original, string shortened)
+        {
+            using (var cn = new SqlConnection(connectionString))
+            {
+                var cmd = new SqlCommand("dbo.UrlsUsed_spt", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters
+                    .Add(new SqlParameter("@OriginalUrl", SqlDbType.VarChar))
+                    .Value = original;
+                cmd.Parameters
+                    .Add(new SqlParameter("@ShortenedUrl", SqlDbType.VarChar))
+                    .Value = shortened;
+                cn.Open();
+                cmd.ExecuteNonQuery();
+                cn.Close();
+            }
+        }
+        public string GetShortendedUrl(string original)
+        {
+            using (var cn = new SqlConnection(connectionString))
+            {
+                using (var cmd = new SqlCommand("dbo.UrlsUsed_sps", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters
+                        .Add(new SqlParameter("@OriginalUrl", SqlDbType.VarChar))
+                        .Value = original;
+                    cn.Open();
+                    var reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            return (reader["ShortenedUrl"].ToString());
+                        }
+                    }
+                    cn.Close();
+                    reader.Dispose();
+                    cmd.Dispose();
+                }
+            }
+            return null;
         }
     }
 }

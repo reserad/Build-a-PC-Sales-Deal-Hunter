@@ -17,29 +17,36 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
     public class TestClass
     {
         [TestMethod]
-        public void SendBlastEmail()
+        public string TestMethod1() 
         {
-            DbWork db = new DbWork();
-            List<string> uniqueEmails = new List<string>();
-
-            foreach (var task in db.GetTasks())
-            {
-                if(!uniqueEmails.Contains(task.Email))
-                    uniqueEmails.Add(task.Email);
-            }
-
-            foreach(var item in uniqueEmails)
-            {
-                try 
-                {
-                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", item, "subject", "body"));
-                }
-                catch(Exception e)
-                {
-                    break;
-                }
-            }
+            UrlShortService u = new UrlShortService();
+            string url = u.GenerateShortUrl("http://reddit.com//r/buildapcsales/comments/3w7vlg/monitor_asus_215_1080p_vesa_90/?ref=search_posts");
+            return url;
         }
+        //[TestMethod]
+        //public void SendBlastEmail()
+        //{
+        //    DbWork db = new DbWork();
+        //    List<string> uniqueEmails = new List<string>();
+
+        //    foreach (var task in db.GetTasks())
+        //    {
+        //        if(!uniqueEmails.Contains(task.Email))
+        //            uniqueEmails.Add(task.Email);
+        //    }
+
+        //    foreach(var item in uniqueEmails)
+        //    {
+        //        try 
+        //        {
+        //            SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", item, "subject", "body"));
+        //        }
+        //        catch(Exception e)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
         private SmtpClient GetSmtpClient()
         {
             var smtp = new SmtpClient();

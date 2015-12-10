@@ -123,6 +123,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\UrlShortService.cs" />
     <Compile Include="Controllers\DbWork.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobScheduler.cs" />
@@ -143,6 +144,8 @@
     <Content Include="Database\dbo.ErrorLogging_spt.sql" />
     <Content Include="Database\dbo.IndividualTask_spd.sql" />
     <Content Include="Database\dbo.SendEmail_sps.sql" />
+    <Content Include="Database\dbo.UrlsUsed_sps.sql" />
+    <Content Include="Database\dbo.UrlsUsed_spt.sql" />
     <Content Include="Database\dbo.SendEmail_spt.sql" />
     <Content Include="Database\dbo.Task_spd.sql" />
     <Content Include="Database\dbo.IndividualTask_sps.sql" />
