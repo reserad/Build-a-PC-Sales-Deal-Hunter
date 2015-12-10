@@ -37,7 +37,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         private SmtpClient GetSmtpClient() 
         {
             var smtp = new SmtpClient();
-            smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSSLOnMail"].ToString());
+            smtp.Port = 25;
+            smtp.EnableSsl = true;
+            smtp.Timeout = 10000;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             return smtp;
         }
         private void SendMail(MailMessage message) 
@@ -91,9 +94,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                 {
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     db.LogEmailSent(product.URL, task.Email);
-                                    Thread.Sleep(100);
                                     //You're in business buddy, prepare for an email.
-                                    SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
+                                    MailMessage mm = new MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL);
+                                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+                                    SendMail(mm);
+                                    mm.Dispose();
                                 }
                             }
                             catch (Exception e)
