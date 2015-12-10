@@ -138,6 +138,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\demo.css" />
+    <Content Include="Content\Fonts\bebasneue-webfont.svg" />
+    <Content Include="Content\jqbar.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
     <Content Include="Content\sweet-alert.css" />
     <Content Include="Database\dbo.ErrorLogging_sps.sql" />
@@ -158,12 +161,18 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\Fonts\bebasneue-webfont.eot" />
+    <Content Include="Content\Fonts\bebasneue-webfont.ttf" />
+    <Content Include="Content\Fonts\bebasneue-webfont.woff" />
+    <Content Include="Content\Fonts\BebasNeue.otf" />
     <None Include="Properties\PublishProfiles\gotshrekt.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jqbar.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

@@ -11,10 +11,29 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
     public class HomeController : Controller
     {
+
+
+
         public ActionResult Index()
         {
             ViewData["submit"] = false;
-            return View();
+
+            Dictionary<string, int> uniqueQueries = new Dictionary<string, int>();
+            var db = new DbWork();
+
+            HashSet<string> items = new HashSet<string>();
+            var Tasks = db.GetTasks();
+            foreach (var item in Tasks)
+            {
+                items.Add(item.Query);
+            }
+
+            foreach (var _item in items)
+            {
+                var count = Tasks.Count(item => item.Query == _item);
+                uniqueQueries.Add(_item, count);
+            }
+            return View(from entry in uniqueQueries orderby entry.Value descending select entry);
         }
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)

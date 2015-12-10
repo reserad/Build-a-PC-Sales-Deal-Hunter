@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Dictionary<string, int>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -25,6 +26,33 @@
                 "info": false,
                 "searching": false
             });
+
+            @*@{
+                int i = 0;
+                List<string> Colors = new List<string>();
+                Colors.Add("#FF681F");
+                Colors.Add("#ea805c");
+                Colors.Add("#88bbc8");
+                Colors.Add("#939393");
+                Colors.Add("#3a89c9");
+              }
+
+            @foreach(var key in Model.Keys)
+            {
+
+                $('#bar-' + i).jqbar({ label: key, value: Model[key], barColor: Colors[i], orientation: 'v' });
+                i++;
+            }
+            
+
+            $('#bar-2').jqbar({ label: 'Ohi', barColor: '#FF681F', value: 70, orientation: 'v' });
+
+            $('#bar-3').jqbar({ label: 'Song', barColor: '#ea805c', value: 50, orientation: 'v' });
+
+            $('#bar-4').jqbar({ label: 'Pisho', barColor: '#88bbc8', value: 90, orientation: 'v' });
+
+            $('#bar-5').jqbar({ label: 'Mara', barColor: '#939393', value: 70, orientation: 'v' });*@
+
         });
         function Delete(e) {
             e.remove();
@@ -117,6 +145,31 @@
             <table id="fields"></table>
         </div>
     </div>
+
+    if (Model != null)
+    {
+        <div class="sixteen columns ">
+            <div class="five columns align-right">
+                <p>
+
+                </p>
+            </div>
+            <div class="nine columns">
+                <div class="bars MT30">
+                    <div id="bar-1">
+                    </div>
+                    <div id="bar-2">
+                    </div>
+                    <div id="bar-3">
+                    </div>
+                    <div id="bar-4">
+                    </div>
+                    <div id="bar-5">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 <div class="modal fade quit" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
