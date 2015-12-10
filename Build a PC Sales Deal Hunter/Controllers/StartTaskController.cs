@@ -9,6 +9,7 @@ using Build_a_PC_Sales_Deal_Hunter.Models;
 using System.Web.Script.Serialization;
 using System.Configuration;
 using System.Net.Mail;
+using System.Threading;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
@@ -90,6 +91,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                 {
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     db.LogEmailSent(product.URL, task.Email);
+                                    Thread.Sleep(100);
                                     //You're in business buddy, prepare for an email.
                                     SendMail(new System.Net.Mail.MailMessage("BuildAPcSalesAlert@gmail.com", task.Email, "Sale Alert!", task.Query + " for $" + price + ": http://reddit.com/" + product.URL));
                                 }

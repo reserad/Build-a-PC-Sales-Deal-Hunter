@@ -18,7 +18,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             ITrigger trigger = TriggerBuilder.Create()
                 .WithDailyTimeIntervalSchedule
                   (s =>
-                     s.WithIntervalInSeconds(60)
+                     s.WithIntervalInSeconds(120)
                     .OnEveryDay()
                     .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0))
                   )
