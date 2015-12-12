@@ -68,3 +68,40 @@ C:\Users\Alec\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Dea
 C:\Users\Alec\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.csprojResolveAssemblyReference.cache
 C:\Users\Alec\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.dll
 C:\Users\Alec\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.dll.config
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Build a PC Sales Deal Hunter.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Antlr3.Runtime.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Newtonsoft.Json.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Quartz.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Helpers.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Mvc.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Optimization.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Razor.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Deployment.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Razor.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\WebGrease.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Common.Logging.Core.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Quartz.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Quartz.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Helpers.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Mvc.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Optimization.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.Razor.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Deployment.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\System.Web.WebPages.Razor.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Antlr3.Runtime.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\Newtonsoft.Json.xml
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.csprojResolveAssemblyReference.cache
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\obj\Debug\Build a PC Sales Deal Hunter.pdb
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\RedditNotifier.Data.dll
+C:\Users\WORK\Documents\GitHub\Build-a-PC-Sales-Deal-Hunter\Build a PC Sales Deal Hunter\bin\RedditNotifier.Data.pdb

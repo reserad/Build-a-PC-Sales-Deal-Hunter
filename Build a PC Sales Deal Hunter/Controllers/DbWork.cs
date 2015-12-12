@@ -7,288 +7,253 @@ using System.Data.SqlClient;
 using System.Data;
 using Build_a_PC_Sales_Deal_Hunter.Models;
 using System.Configuration;
+using RedditNotifier.Data;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
     public class DbWork
     {
-        public static string connectionString;
-        public DbWork()
+        /// <summary>
+        /// Adds the task to the system.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="price">The price.</param>
+        /// <returns>True if the add was successful, otherwise false.</returns>
+        public bool AddTask(string email, string query, int price)
         {
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@Email", email));
+            parameterList.Add(new SqlParameter("@Query", query));
+            parameterList.Add(new SqlParameter("@Price", price));
+
+            return Database.Execute("dbo.Task_spt", parameterList);
         }
-        public void AddTask(string email, string query, int price)
-        {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.Task_spt", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = email;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Query", SqlDbType.VarChar))
-                    .Value = query;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Price", SqlDbType.Int))
-                    .Value = price;
-                cn.Open();
-                cmd.ExecuteNonQuery();
-                cn.Close();
-            }
-        }
+        
+        /// <summary>
+        /// Gets all tasks from the system.
+        /// </summary>
+        /// <returns>List of Task Model objects.</returns>
         public List<TaskModel> GetTasks()
         {
-            List<TaskModel> task = new List<TaskModel>();
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.Task_sps", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cn.Open();
-                var reader = cmd.ExecuteReader();
+            var tasks = new List<TaskModel>();
 
-                if (reader.HasRows)
+            using (var dbResult = Database.GetDataTable("dbo.Task_sps", CommandType.StoredProcedure))
+            {
+                if (dbResult != null && dbResult.Rows != null && dbResult.Rows.Count > 0)
                 {
-                    while (reader.Read())
+                    foreach (DataRow row in dbResult.Rows)
                     {
-                        TaskModel tm = new TaskModel();
-                        tm.Email = reader["Email"].ToString();
-                        tm.Query = reader["Query"].ToString();
-                        tm.Price = Convert.ToInt32(reader["Price"].ToString());
-                        task.Add(tm);
+                        //TODO: set up to be null or default / check for NULL entries from DB.
+                        var tm = new TaskModel();
+                        tm.Email = row["Email"].ToString().Trim();
+                        tm.Query = row["Query"].ToString().Trim();
+                        tm.Price = Convert.ToInt32(row["Price"].ToString());
+                        tasks.Add(tm);
                     }
                 }
-                reader.Dispose();
-                cmd.Dispose();
             }
-            return task;
+
+            return tasks;
         }
-        public void LogEmailSent(string url, string email)
+
+        /// <summary>
+        /// Logs the email sent to the system.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="email">The email.</param>
+        /// <returns>True if the logging was successful, otherwise false.</returns>
+        public bool LogEmailSent(string url, string email)
         {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.SendEmail_spt", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@URL", SqlDbType.VarChar))
-                    .Value = url;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = email;
-                cn.Open();
-                cmd.ExecuteNonQuery();
-                cn.Close();
-            }
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@URL", url));
+            parameterList.Add(new SqlParameter("@Email", email));
+
+            return Database.Execute("dbo.SendEmail_spt", parameterList);
         }
+
+        /// <summary>
+        /// Checks if a given email was sent.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
         public bool CheckIfEmailSent(string url, string email)
         {
-            using (var cn = new SqlConnection(connectionString))
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@URL", url));
+            parameterList.Add(new SqlParameter("@Email", email));
+
+            var dbResult = Database.GetScalar("dbo.SendEmail_sps", CommandType.StoredProcedure, parameterList);
+
+            if (dbResult != null)
             {
-                using (var cmd = new SqlCommand("dbo.SendEmail_sps", cn))
+                int emailSentCount = 0;
+                Int32.TryParse(dbResult.ToString(), out emailSentCount);
+
+                if (emailSentCount > 0)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters
-                        .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                        .Value = email;
-                    cmd.Parameters
-                        .Add(new SqlParameter("@URL", SqlDbType.VarChar))
-                        .Value = url;
-                    cn.Open();
-                    var reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            int emailSentCount = Convert.ToInt32(reader["Emails"].ToString());
-                            if (emailSentCount > 0)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    reader.Dispose();
-                    cmd.Dispose();
+                    return true;
                 }
             }
             return false;
         }
+
+        [Obsolete ("This method is depreciated. Please use the RedditNotifier.Data.Logging.LogError(exception, string) method instead.")]
         public void LogError(string error)
         {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.LogError_spt", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = error;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Time", SqlDbType.DateTime))
-                    .Value = DateTime.Now;
-                cn.Open();
-                cmd.ExecuteNonQuery();
-                cn.Close();
-            }
+            Logging.LogError(new Exception(), error);
         }
-        public void RemoveFromEmailService(string email)
+
+        /// <summary>
+        /// Removes the given email from the system.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns>True if the email was removed. Otherwise false.</returns>
+        public bool RemoveFromEmailService(string email)
         {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.Task_spd", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = email;
-                cn.Open();
-                var reader = cmd.ExecuteReader();
-                reader.Dispose();
-                cmd.Dispose();
-            }
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@Email", email));
+
+            return Database.Execute("dbo.Task_spd", parameterList);
         }
+
+        /// <summary>
+        /// Gets the status of the system...??? I'm not really sure why this exists.
+        /// </summary>
+        /// <returns></returns>
         public StatusInfoModel GetStatus()
         {
-            StatusInfoModel si = new StatusInfoModel();
-            using (var cn = new SqlConnection(connectionString))
-            {
-                using (var cmd = new SqlCommand("dbo.UniqueUsers_sps", cn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cn.Open();
-                    var result = cmd.ExecuteScalar();
-                    cn.Close();
-
-                    if (result != null)
-                    {
-                        int UniqueUsers = 0;
-                        int.TryParse(result.ToString(), out UniqueUsers);
-                        si.UniqueUsers = UniqueUsers;
-                    }
-                }
-            }
-            List<Error> Errors = new List<Error>();
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.ErrorLogging_sps", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cn.Open();
-                var reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        Error er = new Error();
-                        er.ErrorMessage = reader["Error"].ToString();
-                        er.Time = Convert.ToDateTime(reader["Time"].ToString());
-                        Errors.Add(er);
-                    }
-                }
-                cn.Close();
-                reader.Dispose();
-                cmd.Dispose();
-            }
-            si.Errors = Errors;
+            var si = new StatusInfoModel();
+            si.UniqueUsers = GetUniqueUserCount();            
+            si.Errors = GetErrors();
             return si;
         }
+
+        /// <summary>
+        /// Returns a list of all errors in the system.
+        /// </summary>
+        /// <returns></returns>
+        private List<Error> GetErrors()
+        {
+            var result = new List<Error>();
+            using (var dbResult = Database.GetDataTable("dbo.ErrorLogging_sps", null))
+            {
+                if(dbResult != null && dbResult.Rows != null && dbResult.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dbResult.Rows)
+                    {
+                        var er = new Error();
+                        er.ErrorMessage = row["Error"].ToString();
+                        er.Time = Convert.ToDateTime(row["Time"].ToString());
+                        result.Add(er);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the number of unique users in the system.
+        /// </summary>
+        /// <returns></returns>
+        private int GetUniqueUserCount()
+        {
+            var dbResult = Database.GetScalar("dbo.UniqueUsers_sps", CommandType.StoredProcedure);
+            if (dbResult != null)
+            {
+                int uniqueUsers = 0;
+                Int32.TryParse(dbResult.ToString(), out uniqueUsers);
+
+                return uniqueUsers;
+            }
+            return 0;            
+        }
+
         public List<TaskModel> GetIndividualTask(string email)
         {
-            List<TaskModel> task = new List<TaskModel>();
+            //TODO: consider refactoring this to return a single TaskModel object.
+            //Or should this return all tasks for a given email address?
+            // Also consider refactoring this to be simply: GetTask . Individual is redundant.
+            
+            var task = new List<TaskModel>();
             try
             {
-                using (var cn = new SqlConnection(connectionString))
+
+                var parameterList = new List<SqlParameter>();
+                parameterList.Add(new SqlParameter("@Email", email));
+
+                using (var dbResult = Database.GetDataTable("IndividualTask_sps", CommandType.StoredProcedure, parameterList))
                 {
-                    var cmd = new SqlCommand("dbo.IndividualTask_sps", cn);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters
-                        .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                        .Value = email;
-                    cn.Open();
-                    var reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
+                    if (dbResult != null && dbResult.Rows != null && dbResult.Rows.Count > 0)
                     {
-                        while (reader.Read())
+                        foreach (DataRow row in dbResult.Rows)
                         {
-                            TaskModel tm = new TaskModel();
-                            tm.Email = reader["Email"].ToString();
-                            tm.Query = reader["Query"].ToString();
-                            tm.Price = Convert.ToInt32(reader["Price"].ToString());
+                            var tm = new TaskModel();
+                            tm.Email = row["Email"].ToString().Trim();
+                            tm.Query = row["Query"].ToString().Trim();
+                            tm.Price = Convert.ToInt32(row["Price"].ToString());
                             task.Add(tm);
                         }
                     }
-                    reader.Dispose();
-                    cmd.Dispose();
                 }
             }
             catch (Exception e)
             {
                 //Log error
-                LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
-                return task;
+                LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");                
             }
             return task;
         }
-        public void DeleteIndividualTask(string email, string query, int price)
+
+        /// <summary>
+        /// Deletes the individual task.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="price">The price.</param>
+        /// <returns>True if the task was deleted, otherwise false.</returns>
+        public bool DeleteIndividualTask(string email, string query, int price)
         {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.IndividualTask_spd", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                    .Value = email;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Query", SqlDbType.VarChar))
-                    .Value = query;
-                cmd.Parameters
-                    .Add(new SqlParameter("@Price", SqlDbType.VarChar))
-                    .Value = price;
-                cn.Open();
-                var reader = cmd.ExecuteReader();
-                reader.Dispose();
-                cmd.Dispose();
-            }
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@Email", email));
+            parameterList.Add(new SqlParameter("@Query", query));
+            parameterList.Add(new SqlParameter("@Price", price));
+
+            return Database.Execute("dbo.IndividualTask_spd", parameterList);
         }
-        public void LogUrlUsed(string original, string shortened)
+
+        /// <summary>
+        /// Logs the URL used.
+        /// </summary>
+        /// <param name="original">The original.</param>
+        /// <param name="shortened">The shortened.</param>
+        /// <returns></returns>
+        public bool LogUrlUsed(string original, string shortened)
         {
-            using (var cn = new SqlConnection(connectionString))
-            {
-                var cmd = new SqlCommand("dbo.UrlsUsed_spt", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters
-                    .Add(new SqlParameter("@OriginalUrl", SqlDbType.VarChar))
-                    .Value = original;
-                cmd.Parameters
-                    .Add(new SqlParameter("@ShortenedUrl", SqlDbType.VarChar))
-                    .Value = shortened;
-                cn.Open();
-                cmd.ExecuteNonQuery();
-                cn.Close();
-            }
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@OriginalUrl", original));
+            parameterList.Add(new SqlParameter("@ShortenedUrl", shortened));
+
+            return Database.Execute("dbo.UrlsUsed_spt", parameterList);            
         }
+
+        /// <summary>
+        /// Gets the shortended URL.
+        /// </summary>
+        /// <param name="original">The original.</param>
+        /// <returns>String - the shortened URL. If it fails, returns an empty string.</returns>
         public string GetShortendedUrl(string original)
         {
-            using (var cn = new SqlConnection(connectionString))
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@OriginalUrl", original));
+
+            var dbResult = Database.GetScalar("UrlsUsed_sps", CommandType.StoredProcedure, parameterList);
+            if (dbResult != null)
             {
-                using (var cmd = new SqlCommand("dbo.UrlsUsed_sps", cn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters
-                        .Add(new SqlParameter("@OriginalUrl", SqlDbType.VarChar))
-                        .Value = original;
-                    cn.Open();
-                    var reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            return (reader["ShortenedUrl"].ToString());
-                        }
-                    }
-                    cn.Close();
-                    reader.Dispose();
-                    cmd.Dispose();
-                }
+                return dbResult.ToString();
             }
-            return null;
+            return string.Empty;
         }
     }
 }
