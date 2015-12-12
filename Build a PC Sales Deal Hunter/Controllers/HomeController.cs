@@ -11,18 +11,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
     public class HomeController : Controller
     {
-
-
-
-        public ActionResult Index()
+        private List<SummaryItemModel> GetSummaryResults(List<TaskModel> Tasks) 
         {
-            ViewData["submit"] = false;
-
+            List<SummaryItemModel> returnObject = new List<SummaryItemModel>();
             Dictionary<string, int> uniqueQueries = new Dictionary<string, int>();
-            var db = new DbWork();
-
             HashSet<string> items = new HashSet<string>();
-            var Tasks = db.GetTasks();
             foreach (var item in Tasks)
             {
                 items.Add(item.Query);
@@ -30,10 +23,37 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 
             foreach (var _item in items)
             {
-                var count = Tasks.Count(item => item.Query == _item);
-                uniqueQueries.Add(_item, count);
+                uniqueQueries.Add(_item, Tasks.Count(item => item.Query == _item));
             }
-            return View(from entry in uniqueQueries orderby entry.Value descending select entry);
+
+            List<KeyValuePair<string, int>> myList = uniqueQueries.ToList();
+
+            myList.Sort((x, y) => x.Value.CompareTo(y.Value));
+            myList.Reverse();
+
+            uniqueQueries = myList.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            var returnList = uniqueQueries.Keys.ToList();
+            int increment = 0;
+            foreach (var i in returnList)
+            {
+                if (increment == 5)
+                    break;
+                returnObject.Add(new SummaryItemModel()
+                {
+                    Count = Convert.ToInt32((double)uniqueQueries[i] / (double)uniqueQueries.Count() * (double)100),
+                    Query = i
+                });
+                increment++;
+            }
+            return returnObject;
+        }
+
+        public ActionResult Index()
+        {
+            ViewData["submit"] = false;
+            var db = new DbWork();           
+            return View(GetSummaryResults(db.GetTasks()));
         }
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)

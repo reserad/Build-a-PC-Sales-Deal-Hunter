@@ -94,23 +94,23 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                 {
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     db.LogEmailSent(product.URL, task.Email);
-                                    
+
                                     //Shorten URL to AdFly if need be.
                                     UrlShortService u = new UrlShortService();
                                     string OriginalUrl = "http://reddit.com/" + product.URL;
                                     string ShortenedUrl = db.GetShortendedUrl(OriginalUrl);
 
-                                    if (ShortenedUrl.Equals(null))
+                                    if (String.IsNullOrEmpty(ShortenedUrl))
                                         ShortenedUrl = u.GenerateShortUrl(OriginalUrl);
                                     //Log URL to prevent generating extra URL.
                                     db.LogUrlUsed(OriginalUrl, ShortenedUrl);
 
                                     //You're in business buddy, prepare for an email.
                                     MailMessage mm = new MailMessage(
-                                        "BuildAPcSalesAlert@gmail.com", 
+                                        "BuildAPcSalesAlert@gmail.com",
                                         task.Email, "Sale Alert!",
-                                        "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1> <h3>Receive immediate deal alerts</h3>" + 
-                                        task.Query + " for $" + price + "<a href='" + OriginalUrl + "'>" + ShortenedUrl + "</a>");
+                                        "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1> <h3>Receive immediate deal alerts</h3>" +
+                                        task.Query + " for $" + price + "<a href='" + ShortenedUrl +"'>" + OriginalUrl + "</a>");
                                     mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
                                     SendMail(mm);
                                     mm.Dispose();

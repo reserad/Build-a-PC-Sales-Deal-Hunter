@@ -1,7 +1,13 @@
+.bars 
+{
+    height:100px;
+    width:100%;
+}
+
 .jqbar
 {
     position: relative;
-    top: 100px;
+    width:18%;
 }
 .jqbar.vertical
 {

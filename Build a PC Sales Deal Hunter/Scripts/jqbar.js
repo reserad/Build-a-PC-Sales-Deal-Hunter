@@ -9,10 +9,10 @@ License: http://www.egrappler.com/license.
     $.fn.extend({
         jqbar: function (options) {
             var settings = $.extend({
-                animationSpeed: 2000,
-                barLength: 200,
+                animationSpeed: 1000,
+                barLength: 100,
                 orientation: 'h',
-                barWidth: 10,
+                barWidth: 60,
                 barColor: 'red',
                 label: '&nbsp;',
                 value: 100
@@ -67,7 +67,7 @@ License: http://www.egrappler.com/license.
 
                     if (settings.orientation == 'h') {
                         progressBar.animate({ width: w }, {
-                            duration: 2000,
+                            duration: 1000,
                             step: function (currentWidth) {
                                 var percent = parseInt(currentWidth / settings.barLength * 100);
                                 if (isNaN(percent))
@@ -80,7 +80,7 @@ License: http://www.egrappler.com/license.
 
                         var h = settings.barLength - settings.barLength * level / 100;
                         progressBar.animate({ top: h }, {
-                            duration: 2000,
+                            duration: 1000,
                             step: function (currentValue) {
                                 var percent = parseInt((settings.barLength - parseInt(currentValue)) / settings.barLength * 100);
                                 if (isNaN(percent))
@@ -89,7 +89,7 @@ License: http://www.egrappler.com/license.
                             }
                         });
 
-                        progressContainer.find('.bar-percent').animate({ top: (h - valueLabelHeight) }, 2000);
+                        progressContainer.find('.bar-percent').animate({ top: (h - valueLabelHeight) }, 1000);
 
                     }
                 }
