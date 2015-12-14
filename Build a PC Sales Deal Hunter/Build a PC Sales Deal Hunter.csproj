@@ -132,13 +132,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\StatusInfoModel.cs" />
+    <Compile Include="Models\SummaryItemModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\demo.css" />
     <Content Include="Content\Fonts\bebasneue-webfont.svg" />
     <Content Include="Content\jqbar.css" />
     <Content Include="Content\jquery.dataTables.min.css" />

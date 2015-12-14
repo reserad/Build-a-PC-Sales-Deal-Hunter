@@ -86,7 +86,7 @@
                 $fields.empty();
                 for (var i = 0; i < data.length; i++)
                 {
-                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td>' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
+                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td class="QueryText">' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
                     + '<td align = "center"><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td>').appendTo($fields);
                 }
                 if(data.length == 0)
@@ -101,7 +101,7 @@
                 type: "POST",
                 url: "/Home/DeleteIndividualTask/",
                 contentType: "application/json",
-                data: JSON.stringify({ email: $('#email').val(), query: e.attr('data-query'), price: e.attr('data-price') }),
+                data: JSON.stringify({ email: $('#email').val(), query: e.find('.QueryText').text(), price: e.attr('data-price') }),
                 dataType: "json",
                 success: function () {
                     e.remove();

@@ -75,7 +75,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                     }
                 }
             }
-            return View();
+            return View(GetSummaryResults(db.GetTasks()));
         }
         [HttpPost]
         public JsonResult Remove(string email) 

@@ -29,6 +29,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
                 foreach (var a in items["data"]["children"])
                 {
+                    if (ListOfStoredProducts.Count == 2)
+                        break;
                     ListOfStoredProducts.Add(new StoredProducts() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
                 }
             }
@@ -110,8 +112,9 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                         "BuildAPcSalesAlert@gmail.com",
                                         task.Email, "Sale Alert!",
                                         "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1> <h3>Receive immediate deal alerts</h3>" +
-                                        task.Query + " for $" + price + "<a href='" + ShortenedUrl +"'>" + OriginalUrl + "</a>");
+                                        task.Query + " for $" + price + "<a href='" + ShortenedUrl + "'>" + OriginalUrl + "</a>");
                                     mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+                                    mm.IsBodyHtml = true;
                                     SendMail(mm);
                                     mm.Dispose();
                                 }
