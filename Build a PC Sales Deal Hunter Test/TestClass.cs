@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using Build_a_PC_Sales_Deal_Hunter.Controllers;
+using Build_a_PC_Sales_Deal_Hunter.Models;
 using System.Net.Mail;
 using System.Configuration;
 
@@ -25,33 +23,25 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                 ch = Title[i];
                 i++;
             }
-            var digits = Title.Substring(i, Title.Length - i).SkipWhile(c => !Char.IsDigit(c))
-                .TakeWhile(Char.IsDigit)
+            var digits = Title.Substring(i, Title.Length - i).SkipWhile(c => !char.IsDigit(c))
+                .TakeWhile(char.IsDigit)
                 .ToArray();
-
-            var str = new string(digits);
-            return int.Parse(str);
+            return int.Parse(new string(digits));
         }
 
-        private class StoredProducts
-        {
-            public string Title;
-            public string URL;
-        }
         [TestMethod]
         public void SendBlastEmail()
         {
-            var db = new DbWork();
-            var tm = db.GetTasks();
+            var tm = DbWork.GetTasks();
 
-            var ListOfStoredProducts = new List<StoredProducts>();
+            var ListOfStoredProducts = new List<StoredProductsModel>();
             using (var wc = new WebClient())
             {
                 wc.Proxy = null;
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
                 foreach (var a in items["data"]["children"])
                 {
-                    ListOfStoredProducts.Add(new StoredProducts() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
+                    ListOfStoredProducts.Add(new StoredProductsModel() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
                 }
             }
 
@@ -75,20 +65,20 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                         {
                             try
                             {
-                                if (!db.CheckIfEmailSent(product.URL, task.Email))
+                                if (!DbWork.CheckIfEmailSent(product.URL, task.Email))
                                 {
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
-                                    db.LogEmailSent(product.URL, task.Email);
+                                    DbWork.LogEmailSent(product.URL, task.Email);
 
                                     //Shorten URL to AdFly if need be.
                                     UrlShortService u = new UrlShortService();
                                     string OriginalUrl = "http://reddit.com/" + product.URL;
-                                    string ShortenedUrl = db.GetShortendedUrl(OriginalUrl);
+                                    string ShortenedUrl = DbWork.GetShortendedUrl(OriginalUrl);
 
                                     if (String.IsNullOrEmpty(ShortenedUrl))
                                         ShortenedUrl = u.GenerateShortUrl(OriginalUrl);
                                     //Log URL to prevent generating extra URL.
-                                    db.LogUrlUsed(OriginalUrl, ShortenedUrl);
+                                    DbWork.LogUrlUsed(OriginalUrl, ShortenedUrl);
 
                                     //You're in business buddy, prepare for an email.
                                     MailMessage mm = new MailMessage(
@@ -105,7 +95,7 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                             catch (Exception e)
                             {
                                 //Log error
-                                db.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
+                                RedditNotifier.Data.Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
                             }
                         }
                     }

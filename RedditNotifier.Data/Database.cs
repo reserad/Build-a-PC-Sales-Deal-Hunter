@@ -18,9 +18,9 @@ namespace RedditNotifier.Data
             {
                 return ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString().Trim();                
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logging.LogError(ex, "GetConnectionString");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]" + " GetConnectionString");
                 return "Unable to determine connection string. Error has been logged.";
             }
         }
@@ -75,9 +75,9 @@ namespace RedditNotifier.Data
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logging.LogError(ex, "Database.GetDataTable");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]" + " GetDataTable");
                 return new DataTable();
             }
         }
@@ -114,9 +114,9 @@ namespace RedditNotifier.Data
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logging.LogError(ex, "MSSqlUtility.GetScalar");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]" + " GetScalar");
                 return -1;
             }
         }
@@ -168,9 +168,9 @@ namespace RedditNotifier.Data
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logging.LogError(ex, "Database.Execute");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]" + " Database.Execute");
                 return false;
             }
         }

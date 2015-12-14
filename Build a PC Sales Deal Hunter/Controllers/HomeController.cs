@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Build_a_PC_Sales_Deal_Hunter.Models;
-using System.Net;
-using System.Web.Script.Serialization;
+using RedditNotifier.Data;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
@@ -13,9 +11,9 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     {
         private List<SummaryItemModel> GetSummaryResults(List<TaskModel> Tasks) 
         {
-            List<SummaryItemModel> returnObject = new List<SummaryItemModel>();
-            Dictionary<string, int> uniqueQueries = new Dictionary<string, int>();
-            HashSet<string> items = new HashSet<string>();
+            var returnObject = new List<SummaryItemModel>();
+            var uniqueQueries = new Dictionary<string, int>();
+            var items = new HashSet<string>();
             foreach (var item in Tasks)
             {
                 items.Add(item.Query);
@@ -26,7 +24,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 uniqueQueries.Add(_item, Tasks.Count(item => item.Query == _item));
             }
 
-            List<KeyValuePair<string, int>> myList = uniqueQueries.ToList();
+            var myList = uniqueQueries.ToList();
 
             myList.Sort((x, y) => x.Value.CompareTo(y.Value));
             myList.Reverse();
@@ -48,49 +46,45 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return returnObject;
         }
-
         public ActionResult Index()
         {
-            ViewData["submit"] = false;
-            var db = new DbWork();           
-            return View(GetSummaryResults(db.GetTasks()));
+            ViewData["submit"] = false; 
+            return View(GetSummaryResults(DbWork.GetTasks()));
         }
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)
         {
-            var db = new DbWork();
             //Write to Emails table
             for (int i = 0; i < query.Length; i++)
             {
-                if (!String.IsNullOrWhiteSpace(query[i])) 
+                if (!string.IsNullOrWhiteSpace(query[i])) 
                 {
                     try
                     {
-                        db.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
+                        DbWork.AddTask(email.ToLower(), query[i].ToLower(), Convert.ToInt32(lessThan[i]));
                         ViewData["submit"] = true;
                     }
                     catch (Exception e)
                     {
-                        db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                        Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
                     }
                 }
             }
-            return View(GetSummaryResults(db.GetTasks()));
+            return View(GetSummaryResults(DbWork.GetTasks()));
         }
         [HttpPost]
         public JsonResult Remove(string email) 
         {
             //Remove from Emails and EmailsSent tables
-            DbWork db = new DbWork();
-            if (!String.IsNullOrWhiteSpace(email))
+            if (!string.IsNullOrWhiteSpace(email))
             {
                 try
                 {
-                    db.RemoveFromEmailService(email.ToLower());
+                    DbWork.RemoveFromEmailService(email.ToLower());
                 }
                 catch (Exception e)
                 {
-                    db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                    Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
                     return Json(false);
                 }
             }
@@ -99,15 +93,14 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult IndividualTask(string email) 
         {
-            var db = new DbWork();
             var tasks = new List<TaskModel>();
             try
             {
-                tasks = db.GetIndividualTask(email);
+                tasks = DbWork.GetIndividualTask(email);
             }
             catch (Exception e)
             {
-                db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
             }
 
             return Json(tasks);
@@ -115,23 +108,20 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult DeleteIndividualTask(string email, string query, int price) 
         {
-            var db = new DbWork();
             try
             {
-                db.DeleteIndividualTask(email, query, price);
+                DbWork.DeleteIndividualTask(email, query, price);
             }
             catch (Exception e)
             {
-                db.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
                 return Json(false);
             }
-
             return Json(true);
         }
         public ActionResult Stats() 
         {
-            var db = new DbWork();
-            return View(db.GetStatus());
+            return View(DbWork.GetStatus());
         }
     }
 }

@@ -3,20 +3,32 @@
 @{
     ViewBag.Title = "Home Page";
 }
-
 <script src="~/Scripts/jqbar.js" type="text/javascript"></script>
+<script src="~/Scripts/Index.js" type="text/javascript"></script>
 <link rel="stylesheet" href="~/Content/jqbar.css" />
 
+<style>
+    .complete{
+    display:none;
+}
+.more{
+    background:lightblue;
+    color:navy;
+    font-size:13px;
+    padding:3px;
+    cursor:pointer;
+}
+</style>
+
 <script type="text/javascript">
-    $(document).ready(function() {
-        var $fields = $('#fields');
-        $('#btnAddPreference').click(function (e) {
-            $("button[type=submit]").removeAttr('disabled');
-            e.preventDefault();
-            var rowCount = $('#fields tr').length;
-            if(rowCount <= 10)
-                $('<tr><td><input type="text" required placeholder="Query (eg GTX 970)" name="query" /><input type="number" pattern="\d+" min="0" required placeholder="Max $ willing to pay" name="lessThan" /> <button onclick = "Delete($(this).parent().parent())" type = "button" class="btn btn-danger delete"><span class="glyphicon glyphicon-minus"></span></button><td></tr>').appendTo($fields);
+    $(document).ready(function () {
+
+        $(".more").toggle(function(){
+            $(this).text("less..").siblings(".complete").show();    
+        }, function(){
+            $(this).text("more..").siblings(".complete").hide();    
         });
+
         var submission = '@Convert.ToBoolean(ViewData["submit"])';
         if (submission == "True")
         {
@@ -24,93 +36,25 @@
             @ViewData["submit"] = "False";
         }
 
-        var table = $('#dataTable').DataTable(
-        {
-            "paging": false,
-            "info": false,
-            "searching": false
-        });
-
         $('#bar-1').jqbar({ label: '@Model[0].Query', barColor: '#FF681F', value: '@Model[0].Count', orientation: 'v' });
         $('#bar-2').jqbar({ label: '@Model[1].Query', barColor: '#3a89c9', value: '@Model[1].Count', orientation: 'v' });
         $('#bar-3').jqbar({ label: '@Model[2].Query', barColor: '#ea805c', value: '@Model[2].Count', orientation: 'v' });
         $('#bar-4').jqbar({ label: '@Model[3].Query', barColor: '#88bbc8', value: '@Model[3].Count', orientation: 'v' });
         $('#bar-5').jqbar({ label: '@Model[4].Query', barColor: '#939393', value: '@Model[4].Count', orientation: 'v' });
+    });
 
-        });
-        function Delete(e) {
-            e.remove();
-            if ($('#fields tr').length < 1)
-                $("button[type=submit]").attr('disabled', 'disabled');
-        }
-
-        function RemoveEmail(_email)
+    function PopulateModal(data, status) {
+        var $fields = $('#queriesBody');
+        $fields.empty();
+        for (var i = 0; i < data.length; i++)
         {
-            if (_email.length > 0)
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/Remove/",
-                    contentType: "application/json",
-                    data: JSON.stringify({ email: _email }),
-                    dataType: "json",
-                    success: function () {
-                        $('.quit').modal('toggle');
-                        swal("Success!", "Email Address Removed!", "success");
-                    },
-                    error: function () {
-                        $('.quit').modal('toggle');
-                        swal("Error Son", "Something went wrong!", "error");
-                    }
-                });
-            else
-            {
-                $('.quit').modal('toggle');
-                swal("Email address required!", "We're fairly certain your email address isn't nothing.", "error");
-            }
+            $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td class="QueryText">' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
+            + '<td align = "center"><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td>').appendTo($fields);
         }
-
-        function IndividualTask(_email)
-        {
-            $.ajax({
-                type:   "POST",
-                url:    "/Home/IndividualTask/",
-                contentType:    "application/json;",
-                data: JSON.stringify({ email: _email}),
-                dataType:   "json",
-                success:    PopulateModal,
-                error: function () { swal("Error Son", "Queries under this email couldn't be retrieved!", "error");}
-            });
-
-            function PopulateModal(data, status) {
-                var $fields = $('#queriesBody');
-                $fields.empty();
-                for (var i = 0; i < data.length; i++)
-                {
-                    $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td class="QueryText">' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
-                    + '<td align = "center"><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td>').appendTo($fields);
-                }
-                if(data.length == 0)
-                    $('<tr><td>No Records Found</td><td></td><td></td></tr>').appendTo($fields);
-                $('.showQueries').modal('toggle');
-            }
-        }
-
-        function DeleteTaskItem(e)
-        {
-            $.ajax({
-                type: "POST",
-                url: "/Home/DeleteIndividualTask/",
-                contentType: "application/json",
-                data: JSON.stringify({ email: $('#email').val(), query: e.find('.QueryText').text(), price: e.attr('data-price') }),
-                dataType: "json",
-                success: function () {
-                    e.remove();
-                },
-                error: function () {
-                    swal("Error Son", "Something went wrong!", "error");
-                }
-            });
-        }
+        if(data.length == 0)
+            $('<tr><td>No Records Found</td><td></td><td></td></tr>').appendTo($fields);
+        $('.showQueries').modal('toggle');
+    }
 </script>
 
 @using (Html.BeginForm())
@@ -119,6 +63,10 @@
     <div class="jumbotron" style="background-color:#d9d9d9">
         <h1>Build A PC Sales Email Service</h1>
         <h3>Receive immediate deal alerts</h3>
+        <p style="font-size:small"> Hey all! I've been lurking through this subreddit for about a month and a half so far and it hasn't taken me long to learn that some of the best deals only last for short amounts of time and every second counts (as seen <a href="https://www.reddit.com/r/buildapcsales/comments/3v1mjo/gpu_evga_gtx_970_ftw_25068_first_purchase_promo/cxjk40v">here</a>).
+            having experienced this frustration of missing out on deals first hand, I've decided to create a utility for the people of <a href="https://www.reddit.com/r/buildapcsales/">r/buildapcsales/</a> to send out email notifications of deals as soon as they happen.
+            I present you: Build a PC Sales Deal Hunter. Never mind the URL name, it was a joke URL for an Entrepreneurship class last semester.
+            Along with this utility, I also have uploaded the source code to <a href="https://github.com/reserad/Build-a-PC-Sales-Deal-Hunter">Github</a> for all you code junkies out there.</p>
         <div class="form-group">
             <input placeholder="Email Address" required type="email" name="email" id="email" />
             <button type="button" id="btnAddPreference" class="btn btn-info">Add Querys <span class="glyphicon glyphicon-plus-sign"></span></button>

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using Quartz;
 using System.Net;
 using Build_a_PC_Sales_Deal_Hunter.Models;
 using System.Web.Script.Serialization;
-using System.Configuration;
 using System.Net.Mail;
-using System.Threading;
+using RedditNotifier.Data;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 {
@@ -18,11 +15,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public void Execute(IJobExecutionContext context)
         {
             //Search for matches every 1 minute, sends email if match found, logs match to prevent duplicate emails from being sent.
-            var db = new DbWork();
-            var tm = db.GetTasks();
+            var tm = DbWork.GetTasks();
             if (tm.Count == 0)
                 return;
-            var ListOfStoredProducts = new List<StoredProducts>();
+            var ListOfStoredProducts = new List<StoredProductsModel>();
             using (var wc = new WebClient())
             {
                 wc.Proxy = null;
@@ -31,10 +27,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 {
                     if (ListOfStoredProducts.Count == 2)
                         break;
-                    ListOfStoredProducts.Add(new StoredProducts() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
+                    ListOfStoredProducts.Add(new StoredProductsModel() { Title = a["data"]["title"], URL = a["data"]["permalink"] });
                 }
             }
-            FindMatches(tm, ListOfStoredProducts, db);
+            FindMatches(tm, ListOfStoredProducts);
         }
         private SmtpClient GetSmtpClient() 
         {
@@ -43,6 +39,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             smtp.EnableSsl = true;
             smtp.Timeout = 10000;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = true;
             return smtp;
         }
         private void SendMail(MailMessage message) 
@@ -51,26 +48,16 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         }
         private int PriceFound(string Title)
         {
-            char ch = Title[0];
             int i = 0;
-            while (ch != '$')
-            {
-                ch = Title[i];
+            while (Title[i] != '$')
                 i++;
-            }
+
             var digits = Title.Substring(i, Title.Length - i).SkipWhile(c => !Char.IsDigit(c))
                 .TakeWhile(Char.IsDigit)
                 .ToArray();
-
-            var str = new string(digits);
-            return int.Parse(str);
+            return int.Parse(new string(digits));
         }
-        private class StoredProducts
-        {
-            public string Title;
-            public string URL;
-        }
-        private void FindMatches(List<TaskModel> tm, List<StoredProducts> ListOfStoredProducts, DbWork db) 
+        private void FindMatches(List<TaskModel> tm, List<StoredProductsModel> ListOfStoredProducts) 
         {
             foreach (var task in tm)
             {
@@ -92,37 +79,37 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                         {
                             try
                             {
-                                if (!db.CheckIfEmailSent(product.URL, task.Email))
+                                if (!DbWork.CheckIfEmailSent(product.URL, task.Email))
                                 {
-                                    //Write to EmailsSent Table to prevent duplicate emails being sent every minute
-                                    db.LogEmailSent(product.URL, task.Email);
-
                                     //Shorten URL to AdFly if need be.
-                                    UrlShortService u = new UrlShortService();
                                     string OriginalUrl = "http://reddit.com/" + product.URL;
-                                    string ShortenedUrl = db.GetShortendedUrl(OriginalUrl);
+                                    string ShortenedUrl = DbWork.GetShortendedUrl(OriginalUrl);
 
-                                    if (String.IsNullOrEmpty(ShortenedUrl))
-                                        ShortenedUrl = u.GenerateShortUrl(OriginalUrl);
+                                    if (string.IsNullOrEmpty(ShortenedUrl))
+                                        ShortenedUrl = new UrlShortService().GenerateShortUrl(OriginalUrl);
                                     //Log URL to prevent generating extra URL.
-                                    db.LogUrlUsed(OriginalUrl, ShortenedUrl);
+                                    DbWork.LogUrlUsed(OriginalUrl, ShortenedUrl);
 
                                     //You're in business buddy, prepare for an email.
                                     MailMessage mm = new MailMessage(
                                         "BuildAPcSalesAlert@gmail.com",
                                         task.Email, "Sale Alert!",
-                                        "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1> <h3>Receive immediate deal alerts</h3>" +
+                                        "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1>" +
                                         task.Query + " for $" + price + "<a href='" + ShortenedUrl + "'>" + OriginalUrl + "</a>");
                                     mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
                                     mm.IsBodyHtml = true;
                                     SendMail(mm);
                                     mm.Dispose();
+
+                                    //Write to EmailsSent Table to prevent duplicate emails being sent every minute
+                                    DbWork.LogEmailSent(product.URL, task.Email);
+
                                 }
                             }
                             catch (Exception e)
                             {
                                 //Log error
-                                db.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]");
+                                Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
                             }
                         }
                     }
