@@ -1,34 +1,16 @@
 ﻿@using Build_a_PC_Sales_Deal_Hunter.Models;
-@model List<SummaryItemModel>
+@model SummaryItemModel
 @{
     ViewBag.Title = "Home Page";
 }
+
+<link rel="stylesheet" href="~/Content/typeahead.js-bootstrap3.less" />
 <script src="~/Scripts/jqbar.js" type="text/javascript"></script>
-<script src="~/Scripts/Index.js" type="text/javascript"></script>
 <link rel="stylesheet" href="~/Content/jqbar.css" />
-
-<style>
-    .complete{
-    display:none;
-}
-.more{
-    background:lightblue;
-    color:navy;
-    font-size:13px;
-    padding:3px;
-    cursor:pointer;
-}
-</style>
-
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        $(".more").toggle(function(){
-            $(this).text("less..").siblings(".complete").show();    
-        }, function(){
-            $(this).text("more..").siblings(".complete").hide();    
-        });
-
+    var items = null;
+    $(document).ready(function ()
+    {
         var submission = '@Convert.ToBoolean(ViewData["submit"])';
         if (submission == "True")
         {
@@ -36,26 +18,21 @@
             @ViewData["submit"] = "False";
         }
 
+        items = ['CASE', 'CONTROLLER', "COOLER", "CPU", "FAN",
+    "GPU", "HDD", "HEADPHONES", "KEYBOARD", "MONITOR",
+    "MOUSE", "PSU", "RAM", "SSD", "MOBO", '@Model[0].Query',
+    '@Model[1].Query', '@Model[2].Query', '@Model[3].Query', '@Model[4].Query'
+        ];
+
         $('#bar-1').jqbar({ label: '@Model[0].Query', barColor: '#FF681F', value: '@Model[0].Count', orientation: 'v' });
         $('#bar-2').jqbar({ label: '@Model[1].Query', barColor: '#3a89c9', value: '@Model[1].Count', orientation: 'v' });
         $('#bar-3').jqbar({ label: '@Model[2].Query', barColor: '#ea805c', value: '@Model[2].Count', orientation: 'v' });
         $('#bar-4').jqbar({ label: '@Model[3].Query', barColor: '#88bbc8', value: '@Model[3].Count', orientation: 'v' });
         $('#bar-5').jqbar({ label: '@Model[4].Query', barColor: '#939393', value: '@Model[4].Count', orientation: 'v' });
     });
-
-    function PopulateModal(data, status) {
-        var $fields = $('#queriesBody');
-        $fields.empty();
-        for (var i = 0; i < data.length; i++)
-        {
-            $('<tr data-price="' + data[i].Price + '" data-query="' + $.trim(data[i].Query) + '"><td class="QueryText">' + data[i].Query + '</td><td>$' + data[i].Price + '</td>'
-            + '<td align = "center"><button onclick = "DeleteTaskItem($(this).parent().parent())" type = "button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign"></span></button></td>').appendTo($fields);
-        }
-        if(data.length == 0)
-            $('<tr><td>No Records Found</td><td></td><td></td></tr>').appendTo($fields);
-        $('.showQueries').modal('toggle');
-    }
 </script>
+<script src="~/Scripts/typeahead.js" type="text/javascript"></script>
+<script src="~/Scripts/Index.js" type="text/javascript"></script>
 
 @using (Html.BeginForm())
 {

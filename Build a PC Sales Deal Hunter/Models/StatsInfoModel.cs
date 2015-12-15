@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Models
 {
-    public class StatusInfoModel
+    public class StatsInfoModel
     {
         public List<Error> Errors {get; set;}
         public int UniqueUsers {get; set;}

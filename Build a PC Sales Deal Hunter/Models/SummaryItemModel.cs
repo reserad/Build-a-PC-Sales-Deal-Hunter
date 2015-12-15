@@ -7,7 +7,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Models
 {
     public class SummaryItemModel
     {
-        public int Count;
-        public string Query;
+        public int Count { get; set; }
+        public string Query { get; set; }
     }
 }

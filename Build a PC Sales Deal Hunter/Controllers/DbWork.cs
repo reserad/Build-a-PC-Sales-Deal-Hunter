@@ -68,6 +68,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@URL", url));
             parameterList.Add(new SqlParameter("@Email", email));
+            parameterList.Add(new SqlParameter("@Time", DateTime.Now));
 
             return Database.Execute("dbo.SendEmail_spt", parameterList);
         }
@@ -104,7 +105,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// </summary>
         /// <param name="email">The email.</param>
         /// <returns>True if the email was removed. Otherwise false.</returns>
-        public static bool RemoveFromEmailService(string email)
+        public static bool RemoveFromEmailServiceByEmail(string email)
         {
             var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@Email", email));
@@ -113,12 +114,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         }
 
         /// <summary>
-        /// Gets the status of the system...??? I'm not really sure why this exists.
+        /// Gets information about number of users, emails sent and any errors logged.
         /// </summary>
         /// <returns></returns>
-        public static StatusInfoModel GetStatus()
+        public static StatsInfoModel GetStats()
         {
-            var si = new StatusInfoModel();
+            var si = new StatsInfoModel();
             si.UniqueUsers = GetUniqueUserCount();            
             si.Errors = GetErrors();
             si.EmailsSent = GetNumberEmailsSent();
@@ -178,7 +179,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             return 0;            
         }
 
-        public static List<TaskModel> GetIndividualTask(string email)
+        public static List<TaskModel> GetTasksByIndividual(string email)
         {
             //TODO: consider refactoring this to return a single TaskModel object.
             //Or should this return all tasks for a given email address?
@@ -218,7 +219,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// <param name="query">The query.</param>
         /// <param name="price">The price.</param>
         /// <returns>True if the task was deleted, otherwise false.</returns>
-        public static bool DeleteIndividualTask(string email, string query, int price)
+        public static bool DeleteTaskByIndividual(string email, string query, int price)
         {
             var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@Email", email));
@@ -227,7 +228,6 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 
             return Database.Execute("dbo.IndividualTask_spd", parameterList);
         }
-
         /// <summary>
         /// Logs the URL used.
         /// </summary>

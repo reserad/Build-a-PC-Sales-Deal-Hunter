@@ -12,44 +12,51 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         private List<SummaryItemModel> GetSummaryResults(List<TaskModel> Tasks) 
         {
             var returnObject = new List<SummaryItemModel>();
-            var uniqueQueries = new Dictionary<string, int>();
-            var items = new HashSet<string>();
-            foreach (var item in Tasks)
+            try
             {
-                items.Add(item.Query);
-            }
-
-            foreach (var _item in items)
-            {
-                uniqueQueries.Add(_item, Tasks.Count(item => item.Query == _item));
-            }
-
-            var myList = uniqueQueries.ToList();
-
-            myList.Sort((x, y) => x.Value.CompareTo(y.Value));
-            myList.Reverse();
-
-            uniqueQueries = myList.ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            var returnList = uniqueQueries.Keys.ToList();
-            int increment = 0;
-            foreach (var i in returnList)
-            {
-                if (increment == 5)
-                    break;
-                returnObject.Add(new SummaryItemModel()
+                var uniqueQueries = new Dictionary<string, int>();
+                var items = new HashSet<string>();
+                foreach (var item in Tasks)
                 {
-                    Count = Convert.ToInt32((double)uniqueQueries[i] / (double)uniqueQueries.Count() * (double)100),
-                    Query = i
-                });
-                increment++;
+                    items.Add(item.Query);
+                }
+
+                foreach (var _item in items)
+                {
+                    uniqueQueries.Add(_item, Tasks.Count(item => item.Query == _item));
+                }
+
+                var myList = uniqueQueries.ToList();
+
+                myList.Sort((x, y) => x.Value.CompareTo(y.Value));
+                myList.Reverse();
+
+                uniqueQueries = myList.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                var returnList = uniqueQueries.Keys.ToList();
+                int increment = 0;
+                foreach (var i in returnList)
+                {
+                    if (increment == 5)
+                        break;
+                    returnObject.Add(new SummaryItemModel()
+                    {
+                        Count = Convert.ToInt32((double)uniqueQueries[i] / (double)uniqueQueries.Count() * (double)100),
+                        Query = i
+                    });
+                    increment++;
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
             }
             return returnObject;
         }
         public ActionResult Index()
         {
             ViewData["submit"] = false; 
-            return View(GetSummaryResults(DbWork.GetTasks()));
+            return View();
         }
         [HttpPost]
         public ActionResult Index(string email, string[] query, string[] lessThan)
@@ -80,7 +87,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             {
                 try
                 {
-                    DbWork.RemoveFromEmailService(email.ToLower());
+                    DbWork.RemoveFromEmailServiceByEmail(email.ToLower());
                 }
                 catch (Exception e)
                 {
@@ -93,10 +100,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult IndividualTask(string email) 
         {
+            //Gets wanted-to-be-searched-for tasks by specifc user
             var tasks = new List<TaskModel>();
             try
             {
-                tasks = DbWork.GetIndividualTask(email);
+                tasks = DbWork.GetTasksByIndividual(email);
             }
             catch (Exception e)
             {
@@ -108,20 +116,30 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         [HttpPost]
         public JsonResult DeleteIndividualTask(string email, string query, int price) 
         {
+            //Delete search task by Email Query and Price.
             try
             {
-                DbWork.DeleteIndividualTask(email, query, price);
+                DbWork.DeleteTaskByIndividual(email, query, price);
             }
             catch (Exception e)
             {
                 Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
-                return Json(false);
             }
             return Json(true);
         }
         public ActionResult Stats() 
         {
-            return View(DbWork.GetStatus());
+            //Obtains stats page data.
+            var status = new StatsInfoModel();
+            try
+            {
+                status = DbWork.GetStats();
+            }
+            catch (Exception e)
+            {
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "] Stats");
+            }
+            return View(status);
         }
     }
 }

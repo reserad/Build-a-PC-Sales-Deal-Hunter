@@ -11,10 +11,11 @@ GO
 
 ALTER PROCEDURE [dbo].[SendEmail_spt]
 @Email varchar(50),
-@URL varchar(200)
+@URL varchar(200),
+@Time Datetime
 
 AS
 BEGIN
     SET NOCOUNT ON;
-    INSERT INTO [dbo].[EmailsSent] ([URL], [Email]) VALUES (@URL, @Email)
+    INSERT INTO [dbo].[EmailsSent] ([URL], [Email], [Time]) VALUES (@URL, @Email, @Time)
 END

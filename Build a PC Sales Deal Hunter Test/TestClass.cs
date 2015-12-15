@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using Build_a_PC_Sales_Deal_Hunter.Controllers;
 using Build_a_PC_Sales_Deal_Hunter.Models;
+using RedditNotifier.Data;
 using System.Net.Mail;
 using System.Configuration;
 
@@ -30,7 +31,7 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
         }
 
         [TestMethod]
-        public void SendBlastEmail()
+        public void FindMatches()
         {
             var tm = DbWork.GetTasks();
 
@@ -95,7 +96,7 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                             catch (Exception e)
                             {
                                 //Log error
-                                RedditNotifier.Data.Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
+                                Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
                             }
                         }
                     }

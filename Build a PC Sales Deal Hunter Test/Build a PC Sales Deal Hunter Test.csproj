@@ -71,6 +71,10 @@
       <Project>{97bc6f1f-e843-4cc8-97ba-a8e146ce0eed}</Project>
       <Name>Build a PC Sales Deal Hunter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RedditNotifier.Data\RedditNotifier.Data.csproj">
+      <Project>{cd3f2d76-4f38-4f0e-a52d-9f6fdbdb4954}</Project>
+      <Name>RedditNotifier.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

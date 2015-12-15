@@ -15,8 +15,8 @@
 <h2>Stats</h2>
 @if (Model.UniqueUsers != null && Model.Errors != null)
 {
-    <p>@Model.UniqueUsers Unique Users</p>
-    <p>@Model.EmailsSent Emails Sent (since 12/15/15)</p>
+    <span class="label label-default">@Model.UniqueUsers Unique Users</span>
+    <span class="label label-success">@Model.EmailsSent Emails Sent (since 12/15/15)</span>
 
     <table class="table table-striped table-bordered" cellpadding="10" border="1" id="dataTable">
         <thead style="background-color:#B8D4FF"><tr><th>Time</th><th>Error Message</th></tr></thead>
