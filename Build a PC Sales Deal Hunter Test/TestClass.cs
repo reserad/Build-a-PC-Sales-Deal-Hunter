@@ -33,7 +33,7 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
         [TestMethod]
         public void FindMatches()
         {
-            var tm = DbWork.GetTasks();
+            var tm = DbWork.GetAllTasks();
 
             var ListOfStoredProducts = new List<StoredProductsModel>();
             using (var wc = new WebClient())
@@ -66,7 +66,7 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                         {
                             try
                             {
-                                if (!DbWork.CheckIfEmailSent(product.URL, task.Email))
+                                if (!DbWork.CheckIfEmailSentToUser(product.URL, task.Email))
                                 {
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     DbWork.LogEmailSent(product.URL, task.Email);

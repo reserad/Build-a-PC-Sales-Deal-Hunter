@@ -143,7 +143,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Fonts\bebasneue-webfont.svg" />
-    <None Include="Content\typeahead.js-bootstrap3.less" />
+    <Content Include="Content\typeahead.js-bootstrap3.css" />
     <Content Include="Content\jqbar.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
     <Content Include="Content\sweet-alert.css" />
@@ -164,6 +164,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\sort_both.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Fonts\bebasneue-webfont.eot" />

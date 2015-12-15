@@ -15,7 +15,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public void Execute(IJobExecutionContext context)
         {
             //Search for matches every 1 minute, sends email if match found, logs match to prevent duplicate emails from being sent.
-            var tm = DbWork.GetTasks();
+            var tm = DbWork.GetAllTasks();
             if (tm.Count == 0)
                 return;
             var ListOfStoredProducts = new List<StoredProductsModel>();
@@ -80,7 +80,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                         {
                             try
                             {
-                                if (!DbWork.CheckIfEmailSent(product.URL, task.Email))
+                                if (!DbWork.CheckIfEmailSentToUser(product.URL, task.Email))
                                 {
                                     //Shorten URL to AdFly if need be.
                                     string OriginalUrl = "http://reddit.com/" + product.URL;

@@ -34,7 +34,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// Gets all tasks from the system.
         /// </summary>
         /// <returns>List of Task Model objects.</returns>
-        public static List<TaskModel> GetTasks()
+        public static List<TaskModel> GetAllTasks()
         {
             var tasks = new List<TaskModel>();
 
@@ -79,7 +79,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// <param name="url">The URL.</param>
         /// <param name="email">The email.</param>
         /// <returns></returns>
-        public static bool CheckIfEmailSent(string url, string email)
+        public static bool CheckIfEmailSentToUser(string url, string email)
         {
             var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@URL", url));
@@ -120,8 +120,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         public static StatsInfoModel GetStats()
         {
             var si = new StatsInfoModel();
-            si.UniqueUsers = GetUniqueUserCount();            
-            si.Errors = GetErrors();
+            si.UniqueUsers = GetNumberOfUsers();            
+            si.Errors = GetListOfErrors();
             si.EmailsSent = GetNumberEmailsSent();
             return si;
         }
@@ -143,7 +143,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// Returns a list of all errors in the system.
         /// </summary>
         /// <returns></returns>
-        private static List<Error> GetErrors()
+        private static List<Error> GetListOfErrors()
         {
             var result = new List<Error>();
             using (var dbResult = Database.GetDataTable("dbo.ErrorLogging_sps", null))
@@ -166,7 +166,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         /// Gets the number of unique users in the system.
         /// </summary>
         /// <returns></returns>
-        private static int GetUniqueUserCount()
+        private static int GetNumberOfUsers()
         {
             var dbResult = Database.GetScalar("dbo.UniqueUsers_sps", CommandType.StoredProcedure);
             if (dbResult != null)

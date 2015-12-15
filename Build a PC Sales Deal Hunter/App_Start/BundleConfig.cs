@@ -23,12 +23,16 @@ namespace Build_a_PC_Sales_Deal_Hunter
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/sweet-alert.min.js",
                       "~/Scripts/jquery.dataTables.min.js",
+                      "~/Scripts/jqbar.js",
+                      "~/Scripts/typeahead.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/sweet-alert.css",
                       "~/Content/jquery.dataTables.min.css",
+                      "~/Content/jqbar.css",
+                      "~/Content/typeahead.js-bootstrap3.css",
                       "~/Content/site.css"));
         }
     }
