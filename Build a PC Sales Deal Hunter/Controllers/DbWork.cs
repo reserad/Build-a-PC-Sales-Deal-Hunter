@@ -121,7 +121,21 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             var si = new StatusInfoModel();
             si.UniqueUsers = GetUniqueUserCount();            
             si.Errors = GetErrors();
+            si.EmailsSent = GetNumberEmailsSent();
             return si;
+        }
+
+        private static int GetNumberEmailsSent()
+        {
+            var dbResult = Database.GetScalar("dbo.SendEmailCount_sps", CommandType.StoredProcedure);
+            if (dbResult != null)
+            {
+                int emailsSent = 0;
+                int.TryParse(dbResult.ToString(), out emailsSent);
+
+                return emailsSent;
+            }
+            return 0;  
         }
 
         /// <summary>

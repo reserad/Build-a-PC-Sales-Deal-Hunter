@@ -9,6 +9,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Models
     {
         public List<Error> Errors {get; set;}
         public int UniqueUsers {get; set;}
+        public int EmailsSent { get; set; }
     }
     public class Error 
     {

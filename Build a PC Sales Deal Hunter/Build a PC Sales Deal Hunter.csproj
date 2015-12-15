@@ -132,6 +132,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\StatusInfoModel.cs" />
+    <Compile Include="Models\StoredProductsModel.cs" />
     <Compile Include="Models\SummaryItemModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,6 +147,7 @@
     <Content Include="Database\dbo.ErrorLogging_sps.sql" />
     <Content Include="Database\dbo.ErrorLogging_spt.sql" />
     <Content Include="Database\dbo.IndividualTask_spd.sql" />
+    <Content Include="Database\dbo.SendEmailCount_sps.sql" />
     <Content Include="Database\dbo.SendEmail_sps.sql" />
     <Content Include="Database\dbo.UrlsUsed_sps.sql" />
     <Content Include="Database\dbo.UrlsUsed_spt.sql" />
@@ -167,6 +169,7 @@
     <Content Include="Content\Fonts\BebasNeue.otf" />
     <None Include="Properties\PublishProfiles\gotshrekt.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Index.js" />
     <Content Include="Scripts\jqbar.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

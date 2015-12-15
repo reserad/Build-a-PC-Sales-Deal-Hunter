@@ -39,7 +39,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             smtp.EnableSsl = true;
             smtp.Timeout = 10000;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.UseDefaultCredentials = true;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new SmtpClient().Credentials;
             return smtp;
         }
         private void SendMail(MailMessage message) 
@@ -103,7 +104,6 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 
                                     //Write to EmailsSent Table to prevent duplicate emails being sent every minute
                                     DbWork.LogEmailSent(product.URL, task.Email);
-
                                 }
                             }
                             catch (Exception e)
