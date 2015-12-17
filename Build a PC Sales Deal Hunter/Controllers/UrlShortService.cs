@@ -42,28 +42,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
 	        }
         }
 
-        public UrlShortService(string APPKEY, string UID, AdvertType AdvType, Domain DomainType)
-        {
-	        _UrlBaseAddress = "http://api.adf.ly/api.php";
-	        _APIKEY = APPKEY;
-	        _UID = UID;
-	        _AdvType = GetAdvType(AdvType);
-	        _Domain = GetDomainName(DomainType);
-	        _RequestURL = string.Format("{0}?key={1}&uid={2}&advert_type={3}&domain={4}&url=", _UrlBaseAddress, _APIKEY, _UID, _AdvType, _Domain);
-        }
-
-        public UrlShortService(AdvertType AdvType)
-        {
-	        _UrlBaseAddress = "http://api.adf.ly/api.php";
-	        _AdvType = GetAdvType(AdvType);
-	        _Domain = GetDomainName(Domain.Adf_ly);
-	        _RequestURL = string.Format("{0}?key={1}&uid={2}&advert_type={3}&domain={4}&url=", _UrlBaseAddress, _APIKEY, _UID, _AdvType, _Domain);
-        }
-
         public UrlShortService()
         {
 	        _UrlBaseAddress = "http://api.adf.ly/api.php";
-	        _AdvType = GetAdvType(AdvertType.Banner);
+	        _AdvType = GetAdvType(AdvertType.FullPage);
 	        _Domain = GetDomainName(Domain.Adf_ly);
 	        _RequestURL = string.Format("{0}?key={1}&uid={2}&advert_type={3}&domain={4}&url=", _UrlBaseAddress, _APIKEY, _UID, _AdvType, _Domain);
         }
