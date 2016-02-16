@@ -82,22 +82,15 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                             {
                                 if (!DbWork.CheckIfEmailSentToUser(product.URL, task.Email))
                                 {
-                                    //Shorten URL to AdFly if need be.
                                     string OriginalUrl = "http://reddit.com/" + product.URL;
-                                    string ShortenedUrl = DbWork.GetShortendedUrl(OriginalUrl);
-
-                                    if (string.IsNullOrEmpty(ShortenedUrl))
-                                        ShortenedUrl = new UrlShortService().GenerateShortUrl(OriginalUrl);
-                                    //Log URL to prevent generating extra URL.
-                                    DbWork.LogUrlUsed(OriginalUrl, ShortenedUrl);
 
                                     //You're in business buddy, prepare for an email.
                                     MailMessage mm = new MailMessage(
                                         "BuildAPcSalesAlert@gmail.com",
                                         task.Email, "Sale Alert!",
                                         "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1>" +
-                                        task.Query + " for $" + price + " <a href='" + ShortenedUrl + "'>" + OriginalUrl + "</a></div>" +
-                                    "<p><a href='http://www.gotshrekt.com'>http://www.gotshrekt.com</a></p>");
+                                         " <a href='" + OriginalUrl + "'>" + task.Query + "</a> for $" + price  + "</div>" +
+                                    "<p><a href='http://www.gotshrekt.com'>Build a PC Sales Deal Hunter</a></p>");
                                     mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
                                     mm.IsBodyHtml = true;
                                     SendMail(mm);

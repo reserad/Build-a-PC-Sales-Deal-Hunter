@@ -1,5 +1,5 @@
 ﻿@using Build_a_PC_Sales_Deal_Hunter.Models;
-@model SummaryItemModel
+@model List<SummaryItemModel>
 @{
     ViewBag.Title = "Home Page";
 }
@@ -31,7 +31,8 @@
         {
             "paging": false,
             "info": false,
-            "searching": false
+            "searching": false,
+            "order": [[ 2, "desc" ]]
         });
     });
 

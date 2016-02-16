@@ -1,4 +1,4 @@
-﻿@model Build_a_PC_Sales_Deal_Hunter.Models.StatusInfoModel
+﻿@model Build_a_PC_Sales_Deal_Hunter.Models.StatsInfoModel
 @{
     ViewBag.Title = "Stats";
 }
@@ -7,7 +7,8 @@
     $(document).ready(function () {
         var table = $('#dataTable').DataTable(
         {
-            "info": false
+            "info": false,
+            "order": [[ 0, "desc" ]]
         });
     });
 </script>
@@ -15,8 +16,12 @@
 <h2>Stats</h2>
 @if (Model.UniqueUsers != null && Model.Errors != null)
 {
-    <span class="label label-default">@Model.UniqueUsers Unique Users</span>
-    <span class="label label-success">@Model.EmailsSent Emails Sent (since 12/15/15)</span>
+    <span class="label label-default" style="font-size:small;">@Model.UniqueUsers Unique Users</span>
+    <br />
+    <br />
+    <span class="label label-success" style="font-size:small;">@Model.EmailsSent Emails Sent (since 12/15/15)</span>
+    <br/>
+    <br/>
 
     <table class="table table-striped table-bordered" cellpadding="10" border="1" id="dataTable">
         <thead style="background-color:#B8D4FF"><tr><th>Time</th><th>Error Message</th></tr></thead>
