@@ -58,13 +58,34 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 .ToArray();
             return int.Parse(new string(digits));
         }
+
+        private static bool findSearchTermsInTitle(string title, string searchTerm)
+        {
+            //Parses 'searchTerm' into a String array, looks for all cases in 'title' and determines if the SearchTerm is sufficient ('acceptancePercentage')
+            String[] terms = searchTerm.Split(' ');
+            double acceptancePercentage = 0.5;
+            int correctHits = 0;
+            foreach (String term in terms)
+            {
+                if (title.Contains(term))
+                    correctHits++;
+            }
+
+            if (terms.Length > 2 && (double)correctHits / (double)terms.Length > acceptancePercentage)
+                return true;
+            else if(terms.Length == correctHits)
+                return true;
+
+            return false;
+        }
+
         private void FindMatches(List<TaskModel> tm, List<StoredProductsModel> ListOfStoredProducts) 
         {
             foreach (var task in tm)
             {
                 foreach (var product in ListOfStoredProducts)
                 {
-                    if (product.Title.ToLower().Contains(" " + task.Query.ToLower()) || product.Title.ToLower().Contains(task.Query.ToLower() + " ") || product.Title.ToLower().Contains("[" + task.Query.ToLower() + "]"))
+                    if (findSearchTermsInTitle(product.Title.ToLower(), task.Query.ToLower()))
                     {
                         int price;
                         try
