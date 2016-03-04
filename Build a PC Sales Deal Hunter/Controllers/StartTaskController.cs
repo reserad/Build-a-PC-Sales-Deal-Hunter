@@ -23,6 +23,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             {
                 wc.Proxy = null;
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
+                if (String.IsNullOrEmpty(DbWork.GetJson()))
+                    DbWork.AddJson(new JavaScriptSerializer().Serialize(items));
+                else
+                    DbWork.UpdateJson(new JavaScriptSerializer().Serialize(items));
                 foreach (var a in items["data"]["children"])
                 {
                     if (ListOfStoredProducts.Count == 2)

@@ -260,5 +260,33 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return string.Empty;
         }
+
+
+        public static bool AddJson(string json)
+        {
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@Json", json));
+
+            return Database.Execute("dbo.api_spt", parameterList);
+        }
+
+        public static bool UpdateJson(string json)
+        {
+            var parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@Json", json));
+
+            return Database.Execute("dbo.api_spu", parameterList);
+        }
+
+
+        public static string GetJson()
+        {
+            var dbResult = Database.GetScalar("api_sps", CommandType.StoredProcedure);
+            if (dbResult != null)
+            {
+                return dbResult.ToString();
+            }
+            return string.Empty;
+        }
     }
 }
