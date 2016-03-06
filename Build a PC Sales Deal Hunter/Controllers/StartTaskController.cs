@@ -22,10 +22,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             using (var wc = new WebClient())
             {
                 wc.Proxy = null;
+                wc.Headers.Add("User-Agent", "android:com.example.alec.buildapcsalesnotifier:v1.0.0 (by /u/reserad)");
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
-                if (String.IsNullOrEmpty(DbWork.GetJson()))
+                var dbItems = DbWork.GetJson();
+                if (String.IsNullOrEmpty(dbItems))
                     DbWork.AddJson(new JavaScriptSerializer().Serialize(items));
-                else
+                else if (!dbItems.Equals(items))
                     DbWork.UpdateJson(new JavaScriptSerializer().Serialize(items));
                 foreach (var a in items["data"]["children"])
                 {
