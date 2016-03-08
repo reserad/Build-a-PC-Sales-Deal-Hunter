@@ -17,18 +17,19 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
     {
         private int PriceFound(string Title)
         {
-            char ch = Title[0];
             int i = 0;
-            while (ch != '$')
-            {
-                ch = Title[i];
+            while (Title[i] != '$')
                 i++;
-            }
-            var digits = Title.Substring(i, Title.Length - i).SkipWhile(c => !char.IsDigit(c))
-                .TakeWhile(char.IsDigit)
-                .ToArray();
-            return int.Parse(new string(digits));
+
+            i += 1;
+            int j = i;
+            while (j < Title.Length && (Char.IsDigit(Title[j]) || Title[j] == ' ' || Title[j] == ','))
+                j++;
+
+            String[] items = Title.Substring(i, (j-i)).Trim().Replace(",", "").Split(' ');
+            return Convert.ToInt32(items[0].Trim());
         }
+
 
         [TestMethod]
         public void FindMatches()
@@ -62,43 +63,43 @@ namespace Build_a_PC_Sales_Deal_Hunter_Test
                             break;
                         }
 
-                        if (task.Price >= price)
-                        {
-                            try
-                            {
-                                if (!DbWork.CheckIfEmailSentToUser(product.URL, task.Email))
-                                {
-                                    //Write to EmailsSent Table to prevent duplicate emails being sent every minute
-                                    DbWork.LogEmailSent(product.URL, task.Email);
+                        //if (task.Price >= price)
+                        //{
+                        //    try
+                        //    {
+                        //        if (!DbWork.CheckIfEmailSentToUser(product.URL, task.Email))
+                        //        {
+                        //            //Write to EmailsSent Table to prevent duplicate emails being sent every minute
+                        //            DbWork.LogEmailSent(product.URL, task.Email);
 
-                                    //Shorten URL to AdFly if need be.
-                                    UrlShortService u = new UrlShortService();
-                                    string OriginalUrl = "http://reddit.com/" + product.URL;
-                                    string ShortenedUrl = DbWork.GetShortendedUrl(OriginalUrl);
+                        //            //Shorten URL to AdFly if need be.
+                        //            UrlShortService u = new UrlShortService();
+                        //            string OriginalUrl = "http://reddit.com/" + product.URL;
+                        //            string ShortenedUrl = DbWork.GetShortendedUrl(OriginalUrl);
 
-                                    if (String.IsNullOrEmpty(ShortenedUrl))
-                                        ShortenedUrl = u.GenerateShortUrl(OriginalUrl);
-                                    //Log URL to prevent generating extra URL.
-                                    DbWork.LogUrlUsed(OriginalUrl, ShortenedUrl);
+                        //            if (String.IsNullOrEmpty(ShortenedUrl))
+                        //                ShortenedUrl = u.GenerateShortUrl(OriginalUrl);
+                        //            //Log URL to prevent generating extra URL.
+                        //            DbWork.LogUrlUsed(OriginalUrl, ShortenedUrl);
 
-                                    //You're in business buddy, prepare for an email.
-                                    MailMessage mm = new MailMessage(
-                                        "BuildAPcSalesAlert@gmail.com",
-                                        task.Email, "Sale Alert!",
-                                        "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1>" +
-                                        task.Query + " for $" + price + " <a href='" + ShortenedUrl +"'>" + OriginalUrl + "</a>");
-                                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-                                    mm.IsBodyHtml = true;
-                                    SendMail(mm);
-                                    mm.Dispose();
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                //Log error
-                                Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
-                            }
-                        }
+                        //            //You're in business buddy, prepare for an email.
+                        //            MailMessage mm = new MailMessage(
+                        //                "BuildAPcSalesAlert@gmail.com",
+                        //                task.Email, "Sale Alert!",
+                        //                "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1>" +
+                        //                task.Query + " for $" + price + " <a href='" + ShortenedUrl +"'>" + OriginalUrl + "</a>");
+                        //            mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+                        //            mm.IsBodyHtml = true;
+                        //            SendMail(mm);
+                        //            mm.Dispose();
+                        //        }
+                        //    }
+                        //    catch (Exception e)
+                        //    {
+                        //        //Log error
+                        //        Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " FindMatches");
+                        //    }
+                        //}
                     }
                 }
             }

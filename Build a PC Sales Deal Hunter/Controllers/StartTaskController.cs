@@ -24,11 +24,12 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 wc.Proxy = null;
                 wc.Headers.Add("User-Agent", "android:com.example.alec.buildapcsalesnotifier:v1.0.0 (by /u/reserad)");
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
-                var dbItems = DbWork.GetJson();
-                if (String.IsNullOrEmpty(dbItems))
+
+                if (String.IsNullOrEmpty(DbWork.GetJson()))
                     DbWork.AddJson(new JavaScriptSerializer().Serialize(items));
-                else if (!dbItems.Equals(items))
+                else
                     DbWork.UpdateJson(new JavaScriptSerializer().Serialize(items));
+
                 foreach (var a in items["data"]["children"])
                 {
                     if (ListOfStoredProducts.Count == 2)
@@ -59,10 +60,13 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             while (Title[i] != '$')
                 i++;
 
-            var digits = Title.Substring(i, Title.Length - i).SkipWhile(c => !Char.IsDigit(c))
-                .TakeWhile(Char.IsDigit)
-                .ToArray();
-            return int.Parse(new string(digits));
+            i += 1;
+            int j = i;
+            while (j < Title.Length && (Char.IsDigit(Title[j]) || Title[j] == ' ' || Title[j] == ','))
+                j++;
+
+            String[] items = Title.Substring(i, (j - i)).Trim().Replace(",", "").Split(' ');
+            return Convert.ToInt32(items[0].Trim());
         }
 
         private static bool findSearchTermsInTitle(string title, string searchTerm)

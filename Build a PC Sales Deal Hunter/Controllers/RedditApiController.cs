@@ -16,11 +16,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         // GET api/<controller>
         public JObject Get()
         {
-            try 
+            try
             {
                 return JObject.Parse(DbWork.GetJson());
-            } 
-            catch(Exception e) 
+            }
+            catch (Exception e)
             {
                 Logging.LogError("[" + e.Message + "] [" + e.TargetSite + "] [" + e.Source + "] [" + e.Data + "]" + " API");
             }
