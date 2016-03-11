@@ -288,5 +288,11 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return string.Empty;
         }
+
+        public static bool UpdateAndroidDownloadCount()
+        {
+            var parameterList = new List<SqlParameter>();
+            return Database.Execute("dbo.DownloadLog_spu", parameterList);
+        }
     }
 }

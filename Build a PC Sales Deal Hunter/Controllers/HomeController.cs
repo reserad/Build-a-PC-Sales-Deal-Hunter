@@ -111,5 +111,18 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         {
             return View();
         }
+           [HttpPost]
+        public JsonResult DownloadAndroid()
+        {
+            try 
+            { 
+                DbWork.UpdateAndroidDownloadCount();
+            }
+            catch (Exception e)
+            {
+                Logging.LogError("[" + e.Message + "] [" + e.InnerException + "] [" + e.Data + "]");
+            }
+            return Json(true);
+        }
     }
 }
