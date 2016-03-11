@@ -106,5 +106,10 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             }
             return View(status);
         }
+
+        public ActionResult Android() 
+        {
+            return View();
+        }
     }
 }

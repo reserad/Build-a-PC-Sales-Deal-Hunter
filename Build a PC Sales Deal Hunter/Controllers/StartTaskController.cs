@@ -121,6 +121,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                                         task.Email, "Sale Alert!",
                                         "<div style='padding: 10px; background-color:#d9d9d9'><h1>Build A PC Sales Email Service</h1>" +
                                          " <a href='" + OriginalUrl + "'>" + task.Query + "</a> for $" + price  + "</div>" +
+                                         "<p><a href='http://gotshrekt.com/Home/Android'>Android app available!</a></p>" +
                                     "<p><a href='http://www.gotshrekt.com'>Build a PC Sales Deal Hunter</a></p>");
                                     mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
                                     mm.IsBodyHtml = true;
