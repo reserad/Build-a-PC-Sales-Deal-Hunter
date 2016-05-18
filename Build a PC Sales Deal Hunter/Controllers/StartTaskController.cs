@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Quartz;
 using System.Net;
 using Build_a_PC_Sales_Deal_Hunter.Models;
@@ -14,7 +13,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
     {
         public void Execute(IJobExecutionContext context)
         {
-            //Search for matches every 1 minute, sends email if match found, logs match to prevent duplicate emails from being sent.
+            //Search for matches every 2 minutes, sends email if match found, logs match to prevent duplicate emails from being sent.
             var tm = DbWork.GetAllTasks();
             if (tm.Count == 0)
                 return;
@@ -25,7 +24,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
                 wc.Headers.Add("User-Agent", "android:com.example.alec.buildapcsalesnotifier:v1.0.0 (by /u/reserad)");
                 var items = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://www.reddit.com/r/buildapcsales/search.json?q=&sort=new&restrict_sr=on&t=day"));
 
-                if (String.IsNullOrEmpty(DbWork.GetJson()))
+                if (string.IsNullOrEmpty(DbWork.GetJson()))
                     DbWork.AddJson(new JavaScriptSerializer().Serialize(items));
                 else
                     DbWork.UpdateJson(new JavaScriptSerializer().Serialize(items));
@@ -42,8 +41,8 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         private SmtpClient GetSmtpClient() 
         {
             var smtp = new SmtpClient();
-            smtp.Port = 25;
-            smtp.EnableSsl = true;
+            smtp.Port = 80;
+            smtp.EnableSsl = false;
             smtp.Timeout = 10000;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.UseDefaultCredentials = false;
@@ -65,17 +64,17 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             while (j < Title.Length && (Char.IsDigit(Title[j]) || Title[j] == ' ' || Title[j] == ','))
                 j++;
 
-            String[] items = Title.Substring(i, (j - i)).Trim().Replace(",", "").Split(' ');
+            string[] items = Title.Substring(i, (j - i)).Trim().Replace(",", "").Split(' ');
             return Convert.ToInt32(items[0].Trim());
         }
 
         private static bool findSearchTermsInTitle(string title, string searchTerm)
         {
             //Parses 'searchTerm' into a String array, looks for all cases in 'title' and determines if the SearchTerm is sufficient ('acceptancePercentage')
-            String[] terms = searchTerm.Split(' ');
+            string[] terms = searchTerm.Split(' ');
             double acceptancePercentage = 0.5;
             int correctHits = 0;
-            foreach (String term in terms)
+            foreach (string term in terms)
             {
                 if (title.Contains(term))
                     correctHits++;
