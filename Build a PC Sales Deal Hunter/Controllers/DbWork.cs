@@ -1,12 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using Build_a_PC_Sales_Deal_Hunter.Models;
-using System.Configuration;
 using RedditNotifier.Data;
 
 namespace Build_a_PC_Sales_Deal_Hunter.Controllers
@@ -123,6 +119,7 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
             si.UniqueUsers = GetNumberOfUsers();            
             si.Errors = GetListOfErrors();
             si.EmailsSent = GetNumberEmailsSent();
+            si.Downloads = GetDownloads();
             return si;
         }
 
@@ -293,6 +290,19 @@ namespace Build_a_PC_Sales_Deal_Hunter.Controllers
         {
             var parameterList = new List<SqlParameter>();
             return Database.Execute("dbo.DownloadLog_spu", parameterList);
+        }
+
+        public static int GetDownloads()
+        {
+            var dbResult = Database.GetScalar("dbo.DownloadLog_sps", CommandType.StoredProcedure);
+            if (dbResult != null)
+            {
+                int downloads = 0;
+                int.TryParse(dbResult.ToString(), out downloads);
+
+                return downloads;
+            }
+            return 0;
         }
     }
 }
